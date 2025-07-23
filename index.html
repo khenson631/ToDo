@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <script src="./main.js"></script>
+</head>
+<body>
+    <h1>To Do List</h1>
+    
+    <!-- Add new task -->
+    <div id="newTask">
+        <input type="text" name="title" placeholder="Title">
+        <input type="text" name="description" placeholder="Description">
+        <label for="dueDate">Due Date:</label>
+        <input type="date" name="dueDate" placeholder="Due Date" id="dueDate">
+        <label for="priority">High Priority?</label>
+        <input type="checkbox" name="priority" id="priority">
+        <input type="submit" value="Add Task">
+    </div>
+
+    <!-- TaskList to dynamically populate -->
+    <div id="taskList">
+    </div>
+
+    <!-- Completed tasks list -->
+    <div id="completedList">
+    </div>
+
+</body>
+</html>
