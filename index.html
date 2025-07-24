@@ -4,29 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do List</title>
-    <script src="./main.js"></script>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1>To Do List</h1>
-    
-    <!-- Add new task -->
-    <div id="newTask">
+    <section id="header">
+        <h1>To Do List</h1>
+    </section>
+
+    <!-- Sidebar with projects listed -->
+    <nav id="sidebar">
+        <h1>Projects</h1>
+        <div id="defaultProjects">
+            <button id="btnToday">Today</button>
+            <button id="btnTasks">Tasks</button>
+        </div>
+    </nav>
+
+    <!-- Form to add new task -->
+    <form id="newTask">
         <input type="text" name="title" placeholder="Title">
         <input type="text" name="description" placeholder="Description">
         <label for="dueDate">Due Date:</label>
         <input type="date" name="dueDate" placeholder="Due Date" id="dueDate">
         <label for="priority">High Priority?</label>
         <input type="checkbox" name="priority" id="priority">
-        <input type="submit" value="Add Task">
+        <input type="submit" value="Add Task" id="btnSubmitTask">
     </div>
 
     <!-- TaskList to dynamically populate based on selected project-->
-    <div id="taskList">
+    <div id="taskList"> 
+        <h1>Title</h1>
     </div>
 
     <!-- Completed tasks list -->
     <div id="completedList">
     </div>
 
+    <script src="./main.js"></script>
 </body>
 </html>

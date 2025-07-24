@@ -1,0 +1,24 @@
+* {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+}
+
+#header {
+    grid-column-start:1;
+    grid-column-end: -1;
+}
+
+#sidebar {
+    grid-column-start: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#defaultProjects {
+    display: flex;
+    flex-direction: column;
+}
