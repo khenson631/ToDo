@@ -5,20 +5,46 @@
 body {
     display: grid;
     grid-template-columns: 1fr 6fr;
+    /* grid-template-rows: 1fr 3fr 3fr 3fr; */
+    grid-template-rows: auto auto auto auto;
 }
 
 #header {
     grid-column-start:1;
     grid-column-end: -1;
+    max-height: max-content;
+    padding: 1em;
+    background-color: rgb(149, 146, 157);
+    font-size: large;
 }
 
 #sidebar {
     grid-column-start: 1;
+    grid-row-start: 2;
+    grid-row-end: 4;
     display: flex;
     flex-direction: column;
+    padding: 2em;
+    background-color: rgb(221, 221, 221);
 }
 
 #defaultProjects {
     display: flex;
     flex-direction: column;
+}
+
+#completedList {
+    grid-column-start: 2;   
+}
+
+#taskList {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 2em;
+    padding: 2em;
+}
+
+.task {
+    
 }

@@ -21,19 +21,19 @@
     </nav>
 
     <!-- Form to add new task -->
-    <form id="newTask">
-        <input type="text" name="title" placeholder="Title">
-        <input type="text" name="description" placeholder="Description">
+    <form id="frmNewTask">
+        <input type="text" name="title" placeholder="Title" id="title">
+        <input type="text" name="description" placeholder="Description" id="description">
         <label for="dueDate">Due Date:</label>
         <input type="date" name="dueDate" placeholder="Due Date" id="dueDate">
         <label for="priority">High Priority?</label>
         <input type="checkbox" name="priority" id="priority">
-        <input type="submit" value="Add Task" id="btnSubmitTask">
-    </div>
+        <button type="submit" id="btnAddTask">Add Task</button>
+    </form>
 
     <!-- TaskList to dynamically populate based on selected project-->
     <div id="taskList"> 
-        <h1>Title</h1>
+        <h1 id="taskListH1">Title</h1>
     </div>
 
     <!-- Completed tasks list -->
