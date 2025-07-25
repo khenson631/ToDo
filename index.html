@@ -8,21 +8,23 @@
 </head>
 <body>
     <section id="header">
+        <img src="./list-square-svgrepo-com.svg" alt="checklist icon" width="50px">
         <h1>To Do List</h1>
     </section>
 
     <!-- Sidebar with projects listed -->
     <nav id="sidebar">
-        <h1>Projects</h1>
         <div id="defaultProjects">
-            <button id="btnToday">Today</button>
             <button id="btnTasks">Tasks</button>
+            <button id="btnToday">Today</button>
+            <button id="btnToday">This Week</button>            
         </div>
+        <h1>Projects</h1>
     </nav>
 
     <!-- Form to add new task -->
     <form id="frmNewTask">
-        <input type="text" name="title" placeholder="Title" id="title">
+        <input type="text" name="title" placeholder="Title" id="title" required>
         <input type="text" name="description" placeholder="Description" id="description">
         <label for="dueDate">Due Date:</label>
         <input type="date" name="dueDate" placeholder="Due Date" id="dueDate">

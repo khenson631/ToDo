@@ -5,27 +5,32 @@
 body {
     display: grid;
     grid-template-columns: 1fr 6fr;
-    /* grid-template-rows: 1fr 3fr 3fr 3fr; */
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
+    grid-auto-rows: 500px;
+    margin: 0;
 }
 
 #header {
     grid-column-start:1;
     grid-column-end: -1;
-    max-height: max-content;
-    padding: 1em;
+    height: 100px;
+    padding-left: 2rem;
     background-color: rgb(149, 146, 157);
-    font-size: large;
+    font-size: 1.5rem;
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
 }
 
 #sidebar {
     grid-column-start: 1;
     grid-row-start: 2;
-    grid-row-end: 4;
+    grid-row-end: -1;
     display: flex;
     flex-direction: column;
     padding: 2em;
     background-color: rgb(221, 221, 221);
+    min-height: 100vh;
 }
 
 #defaultProjects {
@@ -41,10 +46,13 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    gap: 2em;
+    gap: .5em;
     padding: 2em;
 }
 
 .task {
-    
+    border: 1px solid darkgray;
+    border-radius: 10px;
+    padding: .5em;
+    background-color:rgb(208, 234, 250);
 }

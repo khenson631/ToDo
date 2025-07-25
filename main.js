@@ -19,14 +19,20 @@ document.getElementById("sidebar").addEventListener("click", function(event) {
 class item {
    
     // constructor for todo item
-    constructor(title,description,dueDate,priority,completed,project) {
+    constructor(title,description,dueDate,priority,completed,project,id) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.completed = completed;
         this.project = project;
+        this.id = id;
     }
+
+    updatePriority(priority) {
+        this.priority = priority;
+    }
+
 }
 
 // have different projects to store todo items
@@ -44,8 +50,6 @@ class project {
 }
 
 // set the default projects
-// const Tasks = new project('Tasks');
-// const Tasks = new project('currentProject',[]);
 projects["Tasks"] = new project("Tasks");
 currentProject = projects["Tasks"];
 
@@ -61,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // dynamically insert new items into the taskList div, keyed by project
-function addTask(item) {
+function addTaskToDOM(item) {
     
     //console.log(item.title);
     
@@ -71,12 +75,51 @@ function addTask(item) {
     // loop thru each property of the item and display it
     for (let key in item) {
         if (item.hasOwnProperty(key)) {
-            if ([key] != 'project' && [key] != 'completed') {
+            if ([key] != 'project' && [key] != 'completed' && [key] != 'id') {
                 //console.log(`${key}: ${item[key]}`);
-                const div = document.createElement('div');
+                
+                let element = '';
+                let elementType = '';
+                
+                // if priority, add a checkbox
+                if ([key] == 'priority') {                
+                    element = 'input';
+                    elementType = 'checkbox';
+                }
+                else {
+                    element = 'div';
+                    elementType = '';
+                }
+                
+                //let div = document.createElement('div');
+                let div = document.createElement(element);
+                if (elementType) {
+                    div.type = elementType;
+                    div.id = [key];
+                    
+                    let priority = item['priority'];
+                    let checked = false;
+                    if (priority === 'High') {
+                        checked = true;
+                    }
+                    div.checked = checked;
+
+                    let label = document.createElement('label');
+                    label.htmlFor = 'priority';
+                    label.textContent = 'High Priority:';
+                    task.appendChild(label);
+                }
                 div.textContent = item[key];
-                div.className = key;
+                div.className = [key];
                 task.appendChild(div);
+                
+                // replace prioroity checkbox with star
+                // const elementToWrap = document.querySelectorAll(".priority");
+                // if (elementToWrap) {
+                //     const label = document.createElement('label');
+                //     elementToWrap.parentNode.insertBefore(label,elementToWrap);
+                //     label.appendChild(elementToWrap);
+                // }                
             }
         }
     }
@@ -86,12 +129,10 @@ function addTask(item) {
     chkComplete.type = 'checkbox';
     chkComplete.name = 'complete';
     chkComplete.class = 'chkComplete';
-    
     // label for complete check box
     const lblComplete = document.createElement('label');
     lblComplete.htmlFor = 'chkComplete';
     lblComplete.textContent = 'Complete:';
-    
     // append complete checkbox and label to dom
     task.appendChild(lblComplete);
     task.appendChild(chkComplete);
@@ -104,14 +145,16 @@ function displayTasks(project) {
     
     taskList.innerHTML = ""; // prevents duplicate DOM entries
 
+    // display header of current tasklist
+   let taskListH1 = document.createElement('h1');
+   taskListH1.textContent = currentProject.name;
+   taskList.appendChild(taskListH1);
+
     project.todos.forEach(element => {
-        const task = addTask(element);
+        const task = addTaskToDOM(element);
         taskList.appendChild(task);
    });
 
-   // change header of current tasklist
-   let taskListH1 = taskList.querySelector("#taskListH1");
-   taskListH1.textContent = currentProject.name;
 }
 
 const inputForm = document.getElementById('frmNewTask');
@@ -127,7 +170,6 @@ inputForm.addEventListener('submit', function(event) {
         const buttonValue = event.target.value;
 
             // get inputs from form
-            
             // title,description,dueDate,priority,completed,project
             const title = inputForm.querySelector('#title').value;
             const description = inputForm.querySelector('#description').value;
@@ -143,14 +185,22 @@ inputForm.addEventListener('submit', function(event) {
 
             const completed = false;
             const project = currentProject;
+            const id = createID();
 
             // let task = new task(title);
-            let task = new item(title,description,dueDate,priority,completed,project);
+            let task = new item(title,description,dueDate,priority,completed,project,id);
             console.log(task);
-            addTask(task);
             currentProject.addToDoItem(task);
-            // displayTasks(currentProject.todos)
+            addTaskToDOM(task);            
             displayTasks(currentProject);
-        
+            inputForm.reset();
     // }
 })
+
+// Interact with to do item: Delte, edit, chnge priority
+// let toDoItem = document.querySelector(".task ");
+
+// function to create unique ID per ToDo item
+function createID() {
+    return crypto.randomUUID();
+}
