@@ -33,6 +33,10 @@ class item {
         this.priority = priority;
     }
 
+    completeItem(id) {
+        // move item to completed section
+    }
+
 }
 
 // have different projects to store todo items
@@ -46,7 +50,6 @@ class project {
     addToDoItem(item) {
         this.todos.push(item);
     }
-
 }
 
 // set the default projects
@@ -71,6 +74,13 @@ function addTaskToDOM(item) {
     
     const task = document.createElement('div');
     task.classList.add('task');
+
+    // checkbox to complete task
+    const chkComplete = document.createElement('input');
+    chkComplete.type = 'checkbox';
+    chkComplete.name = 'complete';
+    chkComplete.class = 'chkComplete';
+    task.appendChild(chkComplete);
 
     // loop thru each property of the item and display it
     for (let key in item) {
@@ -124,18 +134,18 @@ function addTaskToDOM(item) {
         }
     }
 
-    // checkbox to complete task
-    const chkComplete = document.createElement('input');
-    chkComplete.type = 'checkbox';
-    chkComplete.name = 'complete';
-    chkComplete.class = 'chkComplete';
-    // label for complete check box
-    const lblComplete = document.createElement('label');
-    lblComplete.htmlFor = 'chkComplete';
-    lblComplete.textContent = 'Complete:';
-    // append complete checkbox and label to dom
-    task.appendChild(lblComplete);
-    task.appendChild(chkComplete);
+    // // checkbox to complete task
+    // const chkComplete = document.createElement('button');
+    // chkComplete.type = 'checkbox';
+    // chkComplete.name = 'complete';
+    // chkComplete.class = 'chkComplete';
+    // // label for complete check box
+    // const lblComplete = document.createElement('label');
+    // lblComplete.htmlFor = 'chkComplete';
+    // lblComplete.textContent = 'Complete:';
+    // // append complete checkbox and label to dom
+    // task.appendChild(lblComplete);
+    // task.appendChild(chkComplete);
 
     return task;
 }
@@ -204,3 +214,36 @@ inputForm.addEventListener('submit', function(event) {
 function createID() {
     return crypto.randomUUID();
 }
+
+// Logic for adding new projects
+const frmAddNewProject = document.querySelector("#frmNewProject");
+const btnAddProject = document.querySelector("#btnAddProject");
+const btnCancelProject = document.querySelector("#btnCancelNewProject");
+
+frmAddNewProject.style.display = 'none'; // by default, hide the add project form
+
+btnAddProject.addEventListener('click', function(event) {
+    frmAddNewProject.style.display = 'block';
+})
+
+// Cancel add new project
+btnCancelProject.addEventListener('click', function(event) {
+    frmAddNewProject.style.display = 'none';
+    frmAddNewProject.reset();
+})
+
+frmAddNewProject.addEventListener('submit', function(event){
+    frmAddNewProject.preventDefault();
+    let projectTitle = document.querySelector("#newProjectTitle");
+
+    if (!projects[projectTitle]) {
+        projects[projectTitle] = new project(projectTitle);
+    }
+    else {
+        alert("Project alredy exists!");
+        frmAddNewProject.reset();
+    }
+    
+    currentProject = projects[projectTitle];
+    displayTasks(currentProject);
+})
