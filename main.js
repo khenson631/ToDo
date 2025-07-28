@@ -34,9 +34,12 @@ class item {
     }
 
     completeItem(id) {
-        // move item to completed section
+        this.completed = true;
     }
 
+    delete() {
+        currentProject.todos.splice(currentProject.todos.findIndex(item => item.id === this.id), 1)
+    }
 }
 
 // have different projects to store todo items
@@ -79,12 +82,24 @@ function addTaskToDOM(item) {
     const chkComplete = document.createElement('input');
     chkComplete.type = 'checkbox';
     chkComplete.name = 'complete';
-    chkComplete.class = 'chkComplete';
+    chkComplete.classList.add('chkComplete');
+
+    if (item['completed'] === true) {
+        chkComplete.checked = true;
+    } else {
+        chkComplete.checked = false;
+    }
+
     task.appendChild(chkComplete);
 
     // loop thru each property of the item and display it
     for (let key in item) {
         if (item.hasOwnProperty(key)) {
+            
+            if ([key] == 'id') {
+                task.setAttribute('data-id',item[key]);
+            }
+            
             if ([key] != 'project' && [key] != 'completed' && [key] != 'id') {
                 //console.log(`${key}: ${item[key]}`);
                 
@@ -122,30 +137,18 @@ function addTaskToDOM(item) {
                 div.textContent = item[key];
                 div.className = [key];
                 task.appendChild(div);
-                
-                // replace prioroity checkbox with star
-                // const elementToWrap = document.querySelectorAll(".priority");
-                // if (elementToWrap) {
-                //     const label = document.createElement('label');
-                //     elementToWrap.parentNode.insertBefore(label,elementToWrap);
-                //     label.appendChild(elementToWrap);
-                // }                
+                             
             }
         }
     }
 
-    // // checkbox to complete task
-    // const chkComplete = document.createElement('button');
-    // chkComplete.type = 'checkbox';
-    // chkComplete.name = 'complete';
-    // chkComplete.class = 'chkComplete';
-    // // label for complete check box
-    // const lblComplete = document.createElement('label');
-    // lblComplete.htmlFor = 'chkComplete';
-    // lblComplete.textContent = 'Complete:';
-    // // append complete checkbox and label to dom
-    // task.appendChild(lblComplete);
-    // task.appendChild(chkComplete);
+    // delete button
+    const btnDelete = document.createElement('button');
+    btnDelete.type = 'button';
+    btnDelete.name = 'delete';
+    btnDelete.classList.add('btnDelete');
+    btnDelete.innerText = 'Delete';
+    task.appendChild(btnDelete);
 
     return task;
 }
@@ -169,11 +172,7 @@ function displayTasks(project) {
 
 const inputForm = document.getElementById('frmNewTask');
 
-console.log('inputForm:', inputForm);
-
 inputForm.addEventListener('submit', function(event) {
-    console.log('click event triggered');
-    
     event.preventDefault();
 
     // if (event.target.tagName === 'SUBMIT') {
@@ -208,7 +207,47 @@ inputForm.addEventListener('submit', function(event) {
 })
 
 // Interact with to do item: Delte, edit, chnge priority
-// let toDoItem = document.querySelector(".task ");
+// let toDoItem = document.querySelectorAll(".task ");
+
+// // class = chkComplete
+
+// //document.body.addEventListener("click", function(e) {
+// toDoItem.addEventListener("click", function(e) {
+//   if (e.target.classList.contains("chkComplete")) {
+//     alert('complete!' + this.id);
+//   }
+// })
+
+taskList.addEventListener('click', function(event) {
+    
+    // Delete task item
+    if (event.target.classList.contains('btnDelete')) {    
+        const card = event.target.closest('.task');
+        const id = card.getAttribute('data-id');
+        const task = currentProject.todos.find(b => b.id === id);
+        if (task) {
+            task.delete();
+            displayTasks(currentProject); // Re-render cards after deletion}
+        }
+    }
+
+    // Complete task item
+    if (event.target.classList.contains('chkComplete')) {
+        const card = event.target.closest('.task');
+        const id = card.getAttribute('data-id');
+        const task = currentProject.todos.find(b => b.id === id);
+        if (task) {
+            
+            if (task.completed === true) {
+                task.completed = false;
+            } else {
+                task.completeItem();
+            }
+            displayTasks(currentProject);
+        }
+    }
+});
+
 
 // function to create unique ID per ToDo item
 function createID() {
@@ -224,12 +263,14 @@ frmAddNewProject.style.display = 'none'; // by default, hide the add project for
 
 btnAddProject.addEventListener('click', function(event) {
     frmAddNewProject.style.display = 'block';
+    btnAddProject.disabled = 'true';
 })
 
 // Cancel add new project
 btnCancelProject.addEventListener('click', function(event) {
     frmAddNewProject.style.display = 'none';
     frmAddNewProject.reset();
+    btnAddProject.disabled = '';
 })
 
 frmAddNewProject.addEventListener('submit', function(event){
