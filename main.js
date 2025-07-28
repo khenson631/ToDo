@@ -2,7 +2,7 @@
 
 const taskList = document.getElementById('taskList');
 let currentProject = document.getElementById('btnTasks').textContent; // by default, currentProject is Tasks
-
+const sidebar = document.getElementById('sidebar');
 const projects = {};
 
 document.getElementById("sidebar").addEventListener("click", function(event) {
@@ -56,7 +56,10 @@ class project {
 }
 
 // set the default projects
+// ToDo: Make this dynamic based on buttons in div with id = defaultProjects
 projects["Tasks"] = new project("Tasks");
+projects["Today"] = new project("Today");
+projects["This Week"] = new project("This Week");
 currentProject = projects["Tasks"];
 
 // set a default task as an example
@@ -67,7 +70,7 @@ currentProject = projects["Tasks"];
 document.addEventListener('DOMContentLoaded', function () {
     // load tasks at page load if any existing data
     //displayTasks(currentProject.todos); // load the default Tasks list as example
-    displayTasks(currentProject); // load the default Tasks list as example
+    // displayTasks(currentProject); // load the default Tasks list as example
 });
 
 // dynamically insert new items into the taskList div, keyed by project
@@ -156,12 +159,18 @@ function addTaskToDOM(item) {
 // display tasks
 function displayTasks(project) {
     
-    taskList.innerHTML = ""; // prevents duplicate DOM entries
-
+    if (taskList) {
+        taskList.innerHTML = ""; // prevents duplicate DOM entries    
+    }
+    
     // display header of current tasklist
    let taskListH1 = document.createElement('h1');
-   taskListH1.textContent = currentProject.name;
+   taskListH1.textContent = project.name;
    taskList.appendChild(taskListH1);
+
+    //alert(projects[project]);
+
+    // let todos = projects[project].todos;
 
     project.todos.forEach(element => {
         const task = addTaskToDOM(element);
@@ -273,9 +282,14 @@ btnCancelProject.addEventListener('click', function(event) {
     btnAddProject.disabled = '';
 })
 
-frmAddNewProject.addEventListener('submit', function(event){
-    frmAddNewProject.preventDefault();
-    let projectTitle = document.querySelector("#newProjectTitle");
+//frmAddNewProject.addEventListener('submit', function(event){
+let btnSubmitNewProject = frmAddNewProject.querySelector("#btnSubmitNewProject");
+
+
+frmAddNewProject.addEventListener('submit', function(event) { 
+    event.preventDefault();
+
+    let projectTitle = frmAddNewProject.querySelector("#newProjectTitle").value;
 
     if (!projects[projectTitle]) {
         projects[projectTitle] = new project(projectTitle);
@@ -283,8 +297,56 @@ frmAddNewProject.addEventListener('submit', function(event){
     else {
         alert("Project alredy exists!");
         frmAddNewProject.reset();
+        return;
     }
     
     currentProject = projects[projectTitle];
     displayTasks(currentProject);
+    frmAddNewProject.style.display = 'none';
+    frmAddNewProject.reset();
+    btnAddProject.disabled = '';
+    addProjectToSidebar(projectTitle);
 })
+
+function addProjectToSidebar(projectName) {
+    const projectsList = document.getElementById("projectsList");
+    let projectLink = document.createElement('button');
+    projectLink.innerHTML = projectName;
+    projectLink.classList.add('projectButtons');
+    projectsList.appendChild(projectLink);
+    displayAddTaskForm();
+}
+
+// let projectButtons = sidebar.querySelectorAll('.projectButtons');
+let projectButtons = document.querySelectorAll('.projectButtons');
+
+//projectButtons.forEach((button => {
+//    button.addEventListener('click', () => {
+
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('projectButtons')) {
+
+        let button = event.target;
+
+        console.log('project: ' + button.innerHTML);
+        
+         currentProject = projects[button.innerHTML];
+
+            // "Today" and "This Week" can not be added to, they just display whatever is due this day/week
+            if (button.innerHTML === 'Today' || button.innerHTML === 'This Week') {
+                hideAddTaskForm();
+                displayTasks(currentProject);
+                return;
+            }
+        displayAddTaskForm();
+        displayTasks(currentProject);
+    }
+})
+
+function hideAddTaskForm() {
+    inputForm.style.display = 'none';
+}
+
+function displayAddTaskForm() {
+    inputForm.style.display = 'flex';
+}

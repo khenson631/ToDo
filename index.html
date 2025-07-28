@@ -15,19 +15,22 @@
     <!-- Sidebar with projects listed -->
     <nav id="sidebar">
         <div id="defaultProjects">
-            <button id="btnTasks">Tasks</button>
-            <button id="btnToday">Today</button>
-            <button id="btnToday">This Week</button>            
+            <button id="btnTasks" class="projectButtons">Tasks</button>
+            <button id="btnToday" class="projectButtons">Today</button>
+            <button id="btnToday" class="projectButtons">This Week</button>            
         </div>
         <h1>Projects</h1>
-        <button id="btnAddProject">Add Project</button>
-        <form id="frmNewProject">
-            <input type="text" name="newProjectTitle" placeHolder="Title" id="newProjectTitle" required>
-            <div id="buttonContainer">
-                <button type="submit" id="btnSubmitNewProject">Add</button>
-                <button type="button" id="btnCancelNewProject">Cancel</button>
-            </div>
-        </form>
+        <div id="projectsList"></div>
+        <div id="AddProjectButtonAndForm">
+            <button id="btnAddProject">Add Project</button>
+            <form id="frmNewProject">
+                <input type="text" name="newProjectTitle" placeHolder="Title" id="newProjectTitle" required>
+                <div id="buttonContainer">
+                    <button type="submit" id="btnSubmitNewProject">Add</button>
+                    <button type="button" id="btnCancelNewProject">Cancel</button>
+                </div>
+            </form>
+        </div>
     </nav>
 
     <!-- Form to add new task -->
