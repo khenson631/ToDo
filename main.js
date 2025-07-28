@@ -212,6 +212,7 @@ inputForm.addEventListener('submit', function(event) {
             addTaskToDOM(task);            
             displayTasks(currentProject);
             inputForm.reset();
+            // ToDo: If task is due today or this week, display in the Today/This Week projects, respectively.
     // }
 })
 
@@ -334,6 +335,7 @@ document.addEventListener('click', function(event) {
 
             // "Today" and "This Week" can not be added to, they just display whatever is due this day/week
             if (button.innerHTML === 'Today' || button.innerHTML === 'This Week') {
+                // ToDo: Display today and this week tasks
                 hideAddTaskForm();
                 displayTasks(currentProject);
                 return;
