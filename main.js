@@ -5,20 +5,20 @@ import { saveProjectsToStorage, loadProjectsFromStorage, serializeProjects, dese
 const taskList = document.getElementById('taskList');
 let currentProject = document.getElementById('btnTasks').textContent; // by default, currentProject is Tasks
 const sidebar = document.getElementById('sidebar');
-let projects = {};
+export let projects = {};
 
-document.getElementById("sidebar").addEventListener("click", function(event) {
-    if (event.target.tagName === "BUTTON") {
-        const clickedName = event.target.textContent;
-        if (!projects[clickedName]) {
-            projects[clickedName] = new project(clickedName);
-        }
-        currentProject = projects[clickedName];
-        // console.log("Last clicked button ID:", currentProject);
-    }
-});
+// document.getElementById("sidebar").addEventListener("click", function(event) {
+//     if (event.target.tagName === "BUTTON") {
+//         const clickedName = event.target.textContent;
+//         if (!projects[clickedName]) {
+//             projects[clickedName] = new project(clickedName);
+//         }
+//         currentProject = projects[clickedName];
+//         // console.log("Last clicked button ID:", currentProject);
+//     }
+// });
 
-class item {
+export class item {
    
     // constructor for todo item
     constructor(title,description,dueDate,priority,completed,project,id) {
@@ -28,7 +28,7 @@ class item {
         this.priority = priority;
         this.completed = completed;
         //this.project = project;
-        this.project = toString(project);
+        //this.project = toString(project);
         this.id = id;
     }
 
@@ -46,7 +46,7 @@ class item {
 }
 
 // have different projects to store todo items
-class project {
+export class project {
 
     constructor(name,todos = []) {
         this.name = name;
@@ -71,30 +71,25 @@ currentProject = projects["Tasks"];
 // projects["Tasks"].addToDoItem(exampleTask); // add the exampleTask to the default Tasks list
 
 document.addEventListener('DOMContentLoaded', function () {
-    // load tasks at page load if any existing data
-    //displayTasks(currentProject.todos); // load the default Tasks list as example
-    // displayTasks(currentProject); // load the default Tasks list as example
-
-    // Load data from local storage+
-    let loadedProjects = {};
-    loadedProjects = loadProjectsFromStorage();
-    // displayTasks(projects);
     
-    //Loop through the restored projects keys and for each:
-        //Create a new project instance    
-        //For each todo inside, create new item instances using the raw data
-        //Reassign this fully rebuilt object to your global projects 
-    for (let key in loadedProjects) {
-        projects[key] = new project(key);
-            
-        // for (let key in projects[key]) {
-        //     let task = new item(title,description,dueDate,priority,completed,project,id);
-        // }
+    const loadedProjects = loadProjectsFromStorage();
+    deserializeProjects(loadedProjects);
+    
+    if (projects["Tasks"]) {
+        currentProject = projects["Tasks"];
+    } else {
+        currentProject = Object.values(projects)[0];
     }
-    
-    displayTasks(projects);
+
+    displayTasks(currentProject);
 
 });
+
+// function loadProjectFromStorage(project) {
+//     let loadedProjects = {};
+//     loadedProjects = loadProjectsFromStorage();
+// }
+
 
 // dynamically insert new items into the taskList div, keyed by project
 function addTaskToDOM(item) {
@@ -195,10 +190,13 @@ function displayTasks(project) {
 
     // let todos = projects[project].todos;
 
-    project.todos.forEach(element => {
+    //if (typeof(project.todos) != undefined) {
+    if (project.todos) {
+        project.todos.forEach(element => {
         const task = addTaskToDOM(element);
         taskList.appendChild(task);
-   });
+        });
+    }
 
 }
 
@@ -325,13 +323,17 @@ frmAddNewProject.addEventListener('submit', function(event) {
     addProjectToSidebar(projectTitle);
 })
 
-function addProjectToSidebar(projectName) {
-    const projectsList = document.getElementById("projectsList");
-    let projectLink = document.createElement('button');
-    projectLink.innerHTML = projectName;
-    projectLink.classList.add('projectButtons');
-    projectsList.appendChild(projectLink);
-    displayAddTaskForm();
+export function addProjectToSidebar(projectName) {
+    if (projectName === 'Tasks' || projectName === 'Today' || projectName === 'This Week') {
+        // do nothing
+    } else {
+        const projectsList = document.getElementById("projectsList");
+        let projectLink = document.createElement('button');
+        projectLink.innerHTML = projectName;
+        projectLink.classList.add('projectButtons');
+        projectsList.appendChild(projectLink);
+        displayAddTaskForm();
+    }
 }
 
 // let projectButtons = sidebar.querySelectorAll('.projectButtons');
