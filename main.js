@@ -1,9 +1,11 @@
 "use strict";
 
+import { saveProjectsToStorage, loadProjectsFromStorage, serializeProjects, deserializeProjects } from "./storage.js";
+
 const taskList = document.getElementById('taskList');
 let currentProject = document.getElementById('btnTasks').textContent; // by default, currentProject is Tasks
 const sidebar = document.getElementById('sidebar');
-const projects = {};
+let projects = {};
 
 document.getElementById("sidebar").addEventListener("click", function(event) {
     if (event.target.tagName === "BUTTON") {
@@ -25,7 +27,8 @@ class item {
         this.dueDate = dueDate;
         this.priority = priority;
         this.completed = completed;
-        this.project = project;
+        //this.project = project;
+        this.project = toString(project);
         this.id = id;
     }
 
@@ -71,6 +74,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // load tasks at page load if any existing data
     //displayTasks(currentProject.todos); // load the default Tasks list as example
     // displayTasks(currentProject); // load the default Tasks list as example
+
+    // Load data from local storage+
+    let loadedProjects = {};
+    loadedProjects = loadProjectsFromStorage();
+    // displayTasks(projects);
+    
+    //Loop through the restored projects keys and for each:
+        //Create a new project instance    
+        //For each todo inside, create new item instances using the raw data
+        //Reassign this fully rebuilt object to your global projects 
+    for (let key in loadedProjects) {
+        projects[key] = new project(key);
+            
+        // for (let key in projects[key]) {
+        //     let task = new item(title,description,dueDate,priority,completed,project,id);
+        // }
+    }
+    
+    displayTasks(projects);
+
 });
 
 // dynamically insert new items into the taskList div, keyed by project
@@ -183,8 +206,6 @@ const inputForm = document.getElementById('frmNewTask');
 
 inputForm.addEventListener('submit', function(event) {
     event.preventDefault();
-
-    // if (event.target.tagName === 'SUBMIT') {
         const buttonValue = event.target.value;
 
             // get inputs from form
@@ -212,22 +233,12 @@ inputForm.addEventListener('submit', function(event) {
             addTaskToDOM(task);            
             displayTasks(currentProject);
             inputForm.reset();
+            saveProjectsToStorage(projects);
             // ToDo: If task is due today or this week, display in the Today/This Week projects, respectively.
     // }
 })
 
 // Interact with to do item: Delte, edit, chnge priority
-// let toDoItem = document.querySelectorAll(".task ");
-
-// // class = chkComplete
-
-// //document.body.addEventListener("click", function(e) {
-// toDoItem.addEventListener("click", function(e) {
-//   if (e.target.classList.contains("chkComplete")) {
-//     alert('complete!' + this.id);
-//   }
-// })
-
 taskList.addEventListener('click', function(event) {
     
     // Delete task item
@@ -239,6 +250,8 @@ taskList.addEventListener('click', function(event) {
             task.delete();
             displayTasks(currentProject); // Re-render cards after deletion}
         }
+        saveProjectsToStorage(projects);
+
     }
 
     // Complete task item
@@ -255,7 +268,10 @@ taskList.addEventListener('click', function(event) {
             }
             displayTasks(currentProject);
         }
+        saveProjectsToStorage(projects);
     }
+
+    // ToDo: Edit Task Item
 });
 
 
@@ -283,9 +299,7 @@ btnCancelProject.addEventListener('click', function(event) {
     btnAddProject.disabled = '';
 })
 
-//frmAddNewProject.addEventListener('submit', function(event){
 let btnSubmitNewProject = frmAddNewProject.querySelector("#btnSubmitNewProject");
-
 
 frmAddNewProject.addEventListener('submit', function(event) { 
     event.preventDefault();
@@ -301,7 +315,9 @@ frmAddNewProject.addEventListener('submit', function(event) {
         return;
     }
     
-    currentProject = projects[projectTitle];
+    saveProjectsToStorage(projects);
+
+    currentProject = projects[projectTitle];    
     displayTasks(currentProject);
     frmAddNewProject.style.display = 'none';
     frmAddNewProject.reset();
