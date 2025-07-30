@@ -18,7 +18,7 @@
         <div id="defaultProjects">
             <button id="btnTasks" class="projectButtons defaultProjects">Tasks</button>
             <button id="btnToday" class="projectButtons defaultProjects">Today</button>
-            <button id="btnToday" class="projectButtons defaultProjects">This Week</button>            
+            <button id="btnThisWeek" class="projectButtons defaultProjects">This Week</button>            
         </div>
         <h1>Projects</h1>
         <div id="projectsList"></div>
@@ -34,6 +34,14 @@
         </div>
     </nav>
 
+    <!-- TaskList to dynamically populate based on selected project-->
+    <div id="taskList"> 
+        <h1 id="taskListH1">Title</h1>
+    </div>
+
+    <!-- Button to bring up form to add new task -->
+    <button id="btnAddNewTask">Add New Task</button>
+
     <!-- Form to add new task -->
     <form id="frmNewTask">
         <input type="text" name="title" placeholder="Title" id="title" required>
@@ -47,12 +55,8 @@
             <input type="checkbox" name="priority" id="priority">
         </div>
         <button type="submit" id="btnAddTask">Add Task</button>
+        <button type="reset" id="btnCancelAddTask">Cancel</button>
     </form>
-
-    <!-- TaskList to dynamically populate based on selected project-->
-    <div id="taskList"> 
-        <h1 id="taskListH1">Title</h1>
-    </div>
 
     <!-- Completed tasks list -->
     <div id="completedList">

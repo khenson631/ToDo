@@ -6,6 +6,7 @@ const taskList = document.getElementById('taskList');
 let currentProject = document.getElementById('btnTasks').textContent; // by default, currentProject is Tasks
 const sidebar = document.getElementById('sidebar');
 export let projects = {};
+let addTaskCalledFrom = 'addMode';
 
 export class item {
    
@@ -32,6 +33,13 @@ export class item {
     delete(project) {
         // currentProject.todos.splice(currentProject.todos.findIndex(item => item.id === this.id), 1)
         project.todos.splice(project.todos.findIndex(item => item.id === this.id), 1)
+    }
+
+    edit(title,description,dueDate,priority) {
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.priority = priority;
     }
 }
 
@@ -73,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     displayTasks(currentProject);
 
+    hideAddTaskForm();
 });
 
 // dynamically insert new items into the taskList div, keyed by project
@@ -155,6 +164,14 @@ function addTaskToDOM(item) {
     btnDelete.innerText = 'Delete';
     task.appendChild(btnDelete);
 
+    // edit button
+    const btnEditTask = document.createElement('button');
+    btnEditTask.type = 'button';
+    btnEditTask.name = 'edit';
+    btnEditTask.classList.add('btnEditTask');
+    btnEditTask.innerText = 'Edit';
+    task.appendChild(btnEditTask);
+
     return task;
 }
 
@@ -170,63 +187,110 @@ function displayTasks(project) {
    taskListH1.textContent = project.name;
    taskList.appendChild(taskListH1);
 
-    //alert(projects[project]);
-
-    // let todos = projects[project].todos;
-
-    //if (typeof(project.todos) != undefined) {
     if (project.todos) {
         project.todos.forEach(element => {
         const task = addTaskToDOM(element);
         taskList.appendChild(task);
         });
     }
-
 }
 
 const inputForm = document.getElementById('frmNewTask');
 
 inputForm.addEventListener('submit', function(event) {
     event.preventDefault();
-        const buttonValue = event.target.value;
+    const buttonValue = event.target.value;
 
-            // get inputs from form
-            // title,description,dueDate,priority,completed,project
-            const title = inputForm.querySelector('#title').value;
-            const description = inputForm.querySelector('#description').value;
-            const dueDate = inputForm.querySelector('#dueDate').value;
-            
-            let priority = inputForm.querySelector('#priority').checked;
-            if (priority === true) {
-                priority = 'High';
-            }
-            else {
-                priority = 'Normal';
-            }
+    // do add stuff
+    // get inputs from form
+    // title,description,dueDate,priority,completed,project
+    const title = inputForm.querySelector('#title').value;
+    const description = inputForm.querySelector('#description').value;
+    const dueDate = inputForm.querySelector('#dueDate').value;
+    
+    let priority = inputForm.querySelector('#priority').checked;
+    if (priority === true) {
+        priority = 'High';
+    }
+    else {
+        priority = 'Normal';
+    }
 
-            const completed = false;
-            const project = currentProject;
-            const id = createID();
+    const completed = false;
+    const project = currentProject;
+    
+    if (addTaskCalledFrom === 'editMode') {
+        // do edit stuff
+        const id = inputForm.getAttribute('data-id');
+        // find task by id and update
+        for (let project in projects) {
+            //const task = currentProject.todos.find(b => b.id === id);
+            const task = projects[project].todos.find(b => b.id === id);
+            if (task) {
+                task.edit(title,description,dueDate,priority)
+                addToTodayAndThisWeekIfApplicable(task,dueDate,id);
+                removeFromTodayAndThisWeekIfApplicable(task,dueDate,id);
+                //let projectToDeleteFrom = projects[project];
+                //task.delete(projectToDeleteFrom);
+                //displayTasks(currentProject); // Re-render cards after deletion}
+            }
+        }
+        displayTasks(currentProject);
+        inputForm.reset();
+        saveProjectsToStorage(projects);
+    }
+    else if (addTaskCalledFrom === 'addMode') {
+        inputForm.setAttribute('data-id','');
+        const id = createID();
+        let task = new item(title,description,dueDate,priority,completed,project,id);
+        currentProject.addToDoItem(task);
+        addTaskToDOM(task);            
+        displayTasks(currentProject);
+        inputForm.reset();
+        saveProjectsToStorage(projects);
+        
+        // If task is due today or this week, display in the Today/This Week projects, respectively.
+        addToTodayAndThisWeekIfApplicable(task,dueDate,id);
+    }
 
-            // let task = new task(title);
-            let task = new item(title,description,dueDate,priority,completed,project,id);
-            console.log(task);
-            currentProject.addToDoItem(task);
-            addTaskToDOM(task);            
-            displayTasks(currentProject);
-            inputForm.reset();
-            saveProjectsToStorage(projects);
-            
-            // If task is due today or this week, display in the Today/This Week projects, respectively.
-            if (dueDateEqualsToday(dueDate)) {
-                projects["Today"].addToDoItem(task);
-            }
-            
-            if (isDueThisWeek(dueDate)) {
-                projects["This Week"].addToDoItem(task);
-            }
-    // }
+    hideAddTaskForm();
 })
+
+function addToTodayAndThisWeekIfApplicable(task,dueDate,id) {
+
+    const inTodayList = projects["Today"].todos.find(a => a.id === id);
+    if (!inTodayList) {
+        if (dueDateEqualsToday(dueDate)) {
+        projects["Today"].addToDoItem(task);
+        }    
+    }
+    
+    const inThisWeekList = projects["This Week"].todos.find(a => a.id === id);
+    if (!inThisWeekList) {
+        if (isDueThisWeek(dueDate)) {
+            projects["This Week"].addToDoItem(task);
+        }
+    }
+}
+
+function removeFromTodayAndThisWeekIfApplicable(task,dueDate,id) {
+
+    const inTodayList = projects["Today"].todos.find(a => a.id === id);
+    if (inTodayList) {
+        if (!dueDateEqualsToday(dueDate)) {
+           // projects["Today"].addToDoItem(task);
+            projects["Today"].todos.splice(projects["Today"].todos.findIndex(item => item.id === id), 1)
+        }    
+    }
+    
+    const inThisWeekList = projects["This Week"].todos.find(a => a.id === id);
+    if (inThisWeekList) {
+        if (!isDueThisWeek(dueDate)) {
+            // projects["This Week"].addToDoItem(task);
+            projects["This Week"].todos.splice(projects["This Week"].todos.findIndex(item => item.id === id), 1)
+        }
+    }
+}
 
 // Interact with to do item: Delte, edit, chnge priority
 taskList.addEventListener('click', function(event) {
@@ -267,8 +331,46 @@ taskList.addEventListener('click', function(event) {
     }
 
     // ToDo: Edit Task Item
+    if (event.target.classList.contains('btnEditTask')) {
+        const card = event.target.closest('.task');
+        const id = card.getAttribute('data-id');
+        const task = currentProject.todos.find(b => b.id === id);
+        if (task) {
+            // Display inputForm in place of current card
+            addTaskCalledFrom = 'editMode';
+            card.replaceWith(inputForm);
+            populateInputFormWithCurrentTask(task);
+            displayAddTaskForm();
+            inputForm.setAttribute('data-id',id);
+            
+            // auto populate inputform with current card attributes
+            // if clcikcing add (should rename to update), edit task
+            // then display tasks
+            // and save to storage
+            //and hide add task form
+        }
+    }
 });
 
+function populateInputFormWithCurrentTask(task) {
+        inputForm.querySelector("#title").value = task.title;
+        inputForm.querySelector("#description").value = task.description;
+        inputForm.querySelector("#dueDate").value = task.dueDate;
+        
+        //let priority = inputForm.querySelector('#priority').checked;
+        let priority = task.priority;
+        if (priority === 'High') {
+            inputForm.querySelector('#priority').checked = true;
+        }
+        else {
+            inputForm.querySelector('#priority').checked = false;
+        }
+
+        //const completed = false;
+        //const project = currentProject;
+        //const id = task.id;
+        inputForm.querySelector('#btnAddTask').textContent = 'Update Task';
+}
 
 // function to create unique ID per ToDo item
 function createID() {
@@ -337,22 +439,18 @@ let projectButtons = document.querySelectorAll('.projectButtons');
 
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('projectButtons')) {
-
         let button = event.target;
-
-        console.log('project: ' + button.innerHTML);
-        
          currentProject = projects[button.innerHTML];
 
             // "Today" and "This Week" can not be added to, they just display whatever is due this day/week
             if (button.innerHTML === 'Today' || button.innerHTML === 'This Week') {
-                // ToDo: Display today and this week tasks
                 hideAddTaskForm();
                 displayTasks(currentProject);
                 return;
             }
         displayAddTaskForm();
         displayTasks(currentProject);
+         hideAddTaskForm();
     }
 })
 
@@ -397,3 +495,18 @@ function isDueThisWeek(dueDateStr) {
 
     return dueDate >= startDate && dueDate <= endDate;
 }
+
+const btnAddNewTask = document.querySelector("#btnAddNewTask");
+const btnCancelAddTask = document.querySelector('#btnCancelAddTask');
+
+btnAddNewTask.addEventListener('click', function(event) {
+    addTaskCalledFrom = 'addMode';
+    displayAddTaskForm();
+    inputForm.querySelector('#btnAddTask').textContent = 'Add Task';
+})
+
+btnCancelAddTask.addEventListener('click',function(event) {
+    inputForm.reset();
+    hideAddTaskForm();
+    displayTasks(currentProject);
+})
