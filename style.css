@@ -31,6 +31,7 @@ body {
     padding: 2em;
     background-color: rgb(221, 221, 221);
     min-height: 100vh;
+    width: 200px;
 }
 
 #defaultProjects {
@@ -48,11 +49,12 @@ body {
     flex-wrap: wrap;
     gap: .5em;
     padding: 2em;
+    padding-top: 0;
 }
 
 .task {
     border: 1px solid darkgray;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: .5em;
     background-color:rgb(208, 234, 250);
 }
@@ -62,9 +64,11 @@ body {
     border-radius: 10px;
     padding:1rem;
     margin: 2%;
+    margin-bottom: 0;
     display: flex;
     flex-direction: column;
     gap: .5em;
+    flex-wrap: wrap;
 }
 
 input[type="checkbox"] {
@@ -124,4 +128,53 @@ input[type="checkbox"]:checked::after {
 #btnAddTask {
     width: 10em;
     padding: .25em;
+}
+
+#projectsList,#defaultProjects {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+#sidebar button {
+  /* border: none; */
+}
+
+#AddProjectButtonAndForm {
+  padding: 1em;
+  padding-left: 0;
+}
+
+#btnAddProject {
+  background-color: green;
+  color: white;
+}
+
+.projectButtons {
+  padding: .5em;
+}
+
+#frmNewProject {
+  /* padding: 1em; */
+  display: flex;
+  /* gap: 1em; */
+  margin: 10px;
+  margin-left: 0;
+  padding: 1em;
+  padding-bottom: 0;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 180px;
+}
+
+#buttonContainer {
+  padding: 1em 0 1em 0;
+  display: flex;
+  gap: 2em;
+}
+
+#btnSubmitNewProject, #btnCancelNewProject {
+  width: 5em;
+  padding: 5px;
+  justify-content: space-evenly;
 }
