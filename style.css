@@ -77,8 +77,8 @@ input[type="checkbox"] {
   height: 20px;
   border: 2px solid #007bff;
   border-radius: 50%;
-  appearance: none;            /* Remove default OS styling */
   -webkit-appearance: none;
+  appearance: none; 
   outline: none;
   cursor: pointer;
   position: relative;
@@ -92,15 +92,12 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"] {
-  appearance: none;
   -webkit-appearance: none;
-  /* width: 24px; */
-  /* height: 24px; */
+  appearance: none;
   border-radius: 50%;
   background-color: white;
   border: 2px solid #007bff;
   cursor: pointer;
-  /* display: flex; */
   align-items: center;
   justify-content: center;
   position: relative;
@@ -136,10 +133,6 @@ input[type="checkbox"]:checked::after {
   gap: .5rem;
 }
 
-#sidebar button {
-  /* border: none; */
-}
-
 #AddProjectButtonAndForm {
   padding: 1em;
   padding-left: 0;
@@ -155,9 +148,7 @@ input[type="checkbox"]:checked::after {
 }
 
 #frmNewProject {
-  /* padding: 1em; */
   display: flex;
-  /* gap: 1em; */
   margin: 10px;
   margin-left: 0;
   padding: 1em;

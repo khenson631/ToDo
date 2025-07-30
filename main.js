@@ -7,17 +7,6 @@ let currentProject = document.getElementById('btnTasks').textContent; // by defa
 const sidebar = document.getElementById('sidebar');
 export let projects = {};
 
-// document.getElementById("sidebar").addEventListener("click", function(event) {
-//     if (event.target.tagName === "BUTTON") {
-//         const clickedName = event.target.textContent;
-//         if (!projects[clickedName]) {
-//             projects[clickedName] = new project(clickedName);
-//         }
-//         currentProject = projects[clickedName];
-//         // console.log("Last clicked button ID:", currentProject);
-//     }
-// });
-
 export class item {
    
     // constructor for todo item
@@ -40,8 +29,9 @@ export class item {
         this.completed = true;
     }
 
-    delete() {
-        currentProject.todos.splice(currentProject.todos.findIndex(item => item.id === this.id), 1)
+    delete(project) {
+        // currentProject.todos.splice(currentProject.todos.findIndex(item => item.id === this.id), 1)
+        project.todos.splice(project.todos.findIndex(item => item.id === this.id), 1)
     }
 }
 
@@ -84,12 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
     displayTasks(currentProject);
 
 });
-
-// function loadProjectFromStorage(project) {
-//     let loadedProjects = {};
-//     loadedProjects = loadProjectsFromStorage();
-// }
-
 
 // dynamically insert new items into the taskList div, keyed by project
 function addTaskToDOM(item) {
@@ -232,7 +216,15 @@ inputForm.addEventListener('submit', function(event) {
             displayTasks(currentProject);
             inputForm.reset();
             saveProjectsToStorage(projects);
-            // ToDo: If task is due today or this week, display in the Today/This Week projects, respectively.
+            
+            // If task is due today or this week, display in the Today/This Week projects, respectively.
+            if (dueDateEqualsToday(dueDate)) {
+                projects["Today"].addToDoItem(task);
+            }
+            
+            if (isDueThisWeek(dueDate)) {
+                projects["This Week"].addToDoItem(task);
+            }
     // }
 })
 
@@ -243,10 +235,15 @@ taskList.addEventListener('click', function(event) {
     if (event.target.classList.contains('btnDelete')) {    
         const card = event.target.closest('.task');
         const id = card.getAttribute('data-id');
-        const task = currentProject.todos.find(b => b.id === id);
-        if (task) {
-            task.delete();
-            displayTasks(currentProject); // Re-render cards after deletion}
+        
+        for (let project in projects) {
+            //const task = currentProject.todos.find(b => b.id === id);
+            const task = projects[project].todos.find(b => b.id === id);
+            if (task) {
+                let projectToDeleteFrom = projects[project];
+                task.delete(projectToDeleteFrom);
+                displayTasks(currentProject); // Re-render cards after deletion}
+            }
         }
         saveProjectsToStorage(projects);
 
@@ -336,11 +333,7 @@ export function addProjectToSidebar(projectName) {
     }
 }
 
-// let projectButtons = sidebar.querySelectorAll('.projectButtons');
 let projectButtons = document.querySelectorAll('.projectButtons');
-
-//projectButtons.forEach((button => {
-//    button.addEventListener('click', () => {
 
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('projectButtons')) {
@@ -369,4 +362,38 @@ function hideAddTaskForm() {
 
 function displayAddTaskForm() {
     inputForm.style.display = 'flex';
+}
+
+function dueDateEqualsToday(dueDate) {
+    const today = new Date();
+    const todayYYYYMMDD = today.toISOString().split('T')[0];
+    return dueDate === todayYYYYMMDD;
+}
+
+function getCurrentWeekRange() {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 (Sun) to 6 (Sat)
+
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - dayOfWeek); // back to Sunday
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // forward to Saturday
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    return {
+        start: startOfWeek.toISOString().split('T')[0],
+        end: endOfWeek.toISOString().split('T')[0]
+    };
+}
+
+function isDueThisWeek(dueDateStr) {
+    const dueDate = new Date(dueDateStr);
+    const { start, end } = getCurrentWeekRange();
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    return dueDate >= startDate && dueDate <= endDate;
 }
