@@ -1,11 +1,14 @@
 "use strict";
 
+export let projects = {};
 import { saveProjectsToStorage, loadProjectsFromStorage, serializeProjects, deserializeProjects } from "./storage.js";
 
 const taskList = document.getElementById('taskList');
-let currentProject = document.getElementById('btnTasks').textContent; // by default, currentProject is Tasks
 const sidebar = document.getElementById('sidebar');
-export let projects = {};
+const inputForm = document.getElementById('frmNewTask');
+const btnAddNewTask = document.querySelector("#btnAddNewTask");
+const btnCancelAddTask = document.querySelector('#btnCancelAddTask');
+let currentProject = document.getElementById('btnTasks').textContent; // by default, currentProject is Tasks
 let addTaskCalledFrom = 'addMode';
 
 export class item {
@@ -87,8 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
 // dynamically insert new items into the taskList div, keyed by project
 function addTaskToDOM(item) {
     
-    //console.log(item.title);
-    
     const task = document.createElement('div');
     task.classList.add('task');
 
@@ -115,7 +116,6 @@ function addTaskToDOM(item) {
             }
             
             if ([key] != 'project' && [key] != 'completed' && [key] != 'id') {
-                //console.log(`${key}: ${item[key]}`);
                 
                 let element = '';
                 let elementType = '';
@@ -194,8 +194,6 @@ function displayTasks(project) {
         });
     }
 }
-
-const inputForm = document.getElementById('frmNewTask');
 
 inputForm.addEventListener('submit', function(event) {
     event.preventDefault();
@@ -278,7 +276,6 @@ function removeFromTodayAndThisWeekIfApplicable(task,dueDate,id) {
     const inTodayList = projects["Today"].todos.find(a => a.id === id);
     if (inTodayList) {
         if (!dueDateEqualsToday(dueDate)) {
-           // projects["Today"].addToDoItem(task);
             projects["Today"].todos.splice(projects["Today"].todos.findIndex(item => item.id === id), 1)
         }    
     }
@@ -286,7 +283,6 @@ function removeFromTodayAndThisWeekIfApplicable(task,dueDate,id) {
     const inThisWeekList = projects["This Week"].todos.find(a => a.id === id);
     if (inThisWeekList) {
         if (!isDueThisWeek(dueDate)) {
-            // projects["This Week"].addToDoItem(task);
             projects["This Week"].todos.splice(projects["This Week"].todos.findIndex(item => item.id === id), 1)
         }
     }
@@ -301,7 +297,6 @@ taskList.addEventListener('click', function(event) {
         const id = card.getAttribute('data-id');
         
         for (let project in projects) {
-            //const task = currentProject.todos.find(b => b.id === id);
             const task = projects[project].todos.find(b => b.id === id);
             if (task) {
                 let projectToDeleteFrom = projects[project];
@@ -357,7 +352,6 @@ function populateInputFormWithCurrentTask(task) {
         inputForm.querySelector("#description").value = task.description;
         inputForm.querySelector("#dueDate").value = task.dueDate;
         
-        //let priority = inputForm.querySelector('#priority').checked;
         let priority = task.priority;
         if (priority === 'High') {
             inputForm.querySelector('#priority').checked = true;
@@ -495,9 +489,6 @@ function isDueThisWeek(dueDateStr) {
 
     return dueDate >= startDate && dueDate <= endDate;
 }
-
-const btnAddNewTask = document.querySelector("#btnAddNewTask");
-const btnCancelAddTask = document.querySelector('#btnCancelAddTask');
 
 btnAddNewTask.addEventListener('click', function(event) {
     addTaskCalledFrom = 'addMode';
