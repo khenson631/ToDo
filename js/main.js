@@ -2,6 +2,9 @@
 
 export let projects = {};
 import { saveProjectsToStorage, loadProjectsFromStorage, serializeProjects, deserializeProjects } from "./storage.js";
+import {item, project } from "./models.js";
+import { displayTasks, addTaskToDOM } from "./dom.js";
+
 
 const taskList = document.getElementById('taskList');
 const sidebar = document.getElementById('sidebar');
@@ -10,54 +13,6 @@ const btnAddNewTask = document.querySelector("#btnAddNewTask");
 const btnCancelAddTask = document.querySelector('#btnCancelAddTask');
 let currentProject = document.getElementById('btnTasks').textContent; // by default, currentProject is Tasks
 let addTaskCalledFrom = 'addMode';
-
-export class item {
-   
-    // constructor for todo item
-    constructor(title,description,dueDate,priority,completed,project,id) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.completed = completed;
-        //this.project = project;
-        //this.project = toString(project);
-        this.id = id;
-    }
-
-    updatePriority(priority) {
-        this.priority = priority;
-    }
-
-    completeItem(id) {
-        this.completed = true;
-    }
-
-    delete(project) {
-        // currentProject.todos.splice(currentProject.todos.findIndex(item => item.id === this.id), 1)
-        project.todos.splice(project.todos.findIndex(item => item.id === this.id), 1)
-    }
-
-    edit(title,description,dueDate,priority) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.priority = priority;
-    }
-}
-
-// have different projects to store todo items
-export class project {
-
-    constructor(name,todos = []) {
-        this.name = name;
-        this.todos = todos;
-    }
-
-    addToDoItem(item) {
-        this.todos.push(item);
-    }
-}
 
 // set the default projects
 // ToDo: Make this dynamic based on buttons in div with id = defaultProjects
@@ -71,11 +26,16 @@ currentProject = projects["Tasks"];
 // console.log(exampleTask);
 // projects["Tasks"].addToDoItem(exampleTask); // add the exampleTask to the default Tasks list
 
+// Load from storage and initialize sidebar, display current project tasks
 document.addEventListener('DOMContentLoaded', function () {
     
     const loadedProjects = loadProjectsFromStorage();
     deserializeProjects(loadedProjects);
-    
+
+    for (let projectName in loadedProjects) {
+         addProjectToSidebar(projectName);
+    }
+
     if (projects["Tasks"]) {
         currentProject = projects["Tasks"];
     } else {
@@ -83,117 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     displayTasks(currentProject);
-
     hideAddTaskForm();
 });
-
-// dynamically insert new items into the taskList div, keyed by project
-function addTaskToDOM(item) {
-    
-    const task = document.createElement('div');
-    task.classList.add('task');
-
-    // checkbox to complete task
-    const chkComplete = document.createElement('input');
-    chkComplete.type = 'checkbox';
-    chkComplete.name = 'complete';
-    chkComplete.classList.add('chkComplete');
-
-    if (item['completed'] === true) {
-        chkComplete.checked = true;
-    } else {
-        chkComplete.checked = false;
-    }
-
-    task.appendChild(chkComplete);
-
-    // loop thru each property of the item and display it
-    for (let key in item) {
-        if (item.hasOwnProperty(key)) {
-            
-            if ([key] == 'id') {
-                task.setAttribute('data-id',item[key]);
-            }
-            
-            if ([key] != 'project' && [key] != 'completed' && [key] != 'id') {
-                
-                let element = '';
-                let elementType = '';
-                
-                // if priority, add a checkbox
-                if ([key] == 'priority') {                
-                    element = 'input';
-                    elementType = 'checkbox';
-                }
-                else {
-                    element = 'div';
-                    elementType = '';
-                }
-                
-                //let div = document.createElement('div');
-                let div = document.createElement(element);
-                if (elementType) {
-                    div.type = elementType;
-                    div.id = [key];
-                    
-                    let priority = item['priority'];
-                    let checked = false;
-                    if (priority === 'High') {
-                        checked = true;
-                    }
-                    div.checked = checked;
-
-                    let label = document.createElement('label');
-                    label.htmlFor = 'priority';
-                    label.textContent = 'High Priority:';
-                    task.appendChild(label);
-                }
-                div.textContent = item[key];
-                div.className = [key];
-                task.appendChild(div);
-                             
-            }
-        }
-    }
-
-    // delete button
-    const btnDelete = document.createElement('button');
-    btnDelete.type = 'button';
-    btnDelete.name = 'delete';
-    btnDelete.classList.add('btnDelete');
-    btnDelete.innerText = 'Delete';
-    task.appendChild(btnDelete);
-
-    // edit button
-    const btnEditTask = document.createElement('button');
-    btnEditTask.type = 'button';
-    btnEditTask.name = 'edit';
-    btnEditTask.classList.add('btnEditTask');
-    btnEditTask.innerText = 'Edit';
-    task.appendChild(btnEditTask);
-
-    return task;
-}
-
-// display tasks
-function displayTasks(project) {
-    
-    if (taskList) {
-        taskList.innerHTML = ""; // prevents duplicate DOM entries    
-    }
-    
-    // display header of current tasklist
-   let taskListH1 = document.createElement('h1');
-   taskListH1.textContent = project.name;
-   taskList.appendChild(taskListH1);
-
-    if (project.todos) {
-        project.todos.forEach(element => {
-        const task = addTaskToDOM(element);
-        taskList.appendChild(task);
-        });
-    }
-}
 
 inputForm.addEventListener('submit', function(event) {
     event.preventDefault();
