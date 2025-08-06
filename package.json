@@ -18,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/khenson631/ToDo/issues"
   },
-  "homepage": "https://github.com/khenson631/ToDo#readme"
+  "homepage": "https://github.com/khenson631/ToDo#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "eslint": "^9.32.0",
+    "globals": "^16.3.0"
+  }
 }

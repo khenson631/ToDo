@@ -4,15 +4,6 @@ import { projects, addProjectToSidebar } from "./main.js";
 import {item, project } from "./models.js";
 
 export function saveProjectsToStorage(projects) {
-    // example:
-    // const userObj = {
-    // username = "Maria",
-    // email: "maria@mail.com"
-    // }
-
-    // localStorage.setItem('user', JSON.stringify(userObj))
-    // }
-
     localStorage.setItem('projects',JSON.stringify(projects));
 }
 

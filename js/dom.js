@@ -1,3 +1,5 @@
+import { taskList } from "./main.js";
+
 export function displayTasks(project) {
     
     if (taskList) {
