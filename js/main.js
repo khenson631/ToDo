@@ -4,7 +4,7 @@ export let projects = {};
 import { saveProjectsToStorage, loadProjectsFromStorage, deserializeProjects } from "./storage.js";
 import { project } from "./models.js";
 import { displayTasks } from "./dom.js";
-// import { handleClickEvents, handleFormEvents } from "./events.js";
+import { handleClickEvents, handleFormEvents } from "./events.js";
 import { displayAddTaskForm,hideAddTaskForm } from "./utils.js";
 
 
@@ -52,8 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
     displayTasks(currentProject);
     hideAddTaskForm();
 });
-
-
 
 // Interact with to do item: Delte, edit, chnge priority
 taskList.addEventListener('click', function(event) {
@@ -189,3 +187,7 @@ export function updateAddTaskCalledFrom(value) {
 export function updateCurrentProject(project) {
     currentProject = project;
 }
+
+// event listeners from events.js
+handleClickEvents();
+handleFormEvents();
