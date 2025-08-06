@@ -1,0 +1,22 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "Odin ToDo List Project",
+  "main": "main.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khenson631/ToDo.git"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "Kyle Henson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khenson631/ToDo/issues"
+  },
+  "homepage": "https://github.com/khenson631/ToDo#readme"
+}
