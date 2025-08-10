@@ -7,7 +7,6 @@ import { displayTasks } from "./dom.js";
 import { handleClickEvents, handleFormEvents } from "./events.js";
 import { displayAddTaskForm,hideAddTaskForm } from "./utils.js";
 
-
 export const taskList = document.getElementById('taskList');
 export const sidebar = document.getElementById('sidebar');
 export const inputForm = document.getElementById('frmNewTask');
