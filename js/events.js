@@ -1,0 +1,104 @@
+// All form event listeners and click handling go in this file
+import { inputForm,currentProject,addTaskCalledFrom,btnAddNewTask,btnCancelAddTask,projects,updateAddTaskCalledFrom,updateCurrentProject } from "./main.js";
+import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
+import { displayTasks,addTaskToDOM } from "./dom.js";
+import { saveProjectsToStorage} from "./storage.js";
+import { item } from "./models.js";
+
+export function handleFormEvents() {
+    // do stuff
+    inputForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    // const buttonValue = event.target.value;
+
+    // do add stuff
+    // get inputs from form
+    // title,description,dueDate,priority,completed,project
+    const title = inputForm.querySelector('#title').value;
+    const description = inputForm.querySelector('#description').value;
+    const dueDate = inputForm.querySelector('#dueDate').value;
+    
+    let priority = inputForm.querySelector('#priority').checked;
+    if (priority === true) {
+        priority = 'High';
+    }
+    else {
+        priority = 'Normal';
+    }
+
+    const completed = false;
+    const project = currentProject;
+    
+    if (addTaskCalledFrom === 'editMode') {
+        // do edit stuff
+        const id = inputForm.getAttribute('data-id');
+        // find task by id and update
+        for (let project in projects) {
+            //const task = currentProject.todos.find(b => b.id === id);
+            const task = projects[project].todos.find(b => b.id === id);
+            if (task) {
+                task.edit(title,description,dueDate,priority)
+                addToTodayAndThisWeekIfApplicable(task,dueDate,id);
+                removeFromTodayAndThisWeekIfApplicable(task,dueDate,id);
+                //let projectToDeleteFrom = projects[project];
+                //task.delete(projectToDeleteFrom);
+                //displayTasks(currentProject); // Re-render cards after deletion}
+            }
+        }
+        displayTasks(currentProject);
+        inputForm.reset();
+        saveProjectsToStorage(projects);
+    }
+    else if (addTaskCalledFrom === 'addMode') {
+        inputForm.setAttribute('data-id','');
+        const id = createID();
+        let task = new item(title,description,dueDate,priority,completed,project,id);
+        currentProject.addToDoItem(task);
+        addTaskToDOM(task);            
+        displayTasks(currentProject);
+        inputForm.reset();
+        saveProjectsToStorage(projects);
+        
+        // If task is due today or this week, display in the Today/This Week projects, respectively.
+        addToTodayAndThisWeekIfApplicable(task,dueDate,id);
+    }
+
+    hideAddTaskForm();
+})
+
+}
+
+export function handleClickEvents() {
+    // do stuff
+    btnAddNewTask.addEventListener('click', function(event) {
+        // addTaskCalledFrom = 'addMode';
+        updateAddTaskCalledFrom('addMode');
+        displayAddTaskForm();
+        inputForm.querySelector('#btnAddTask').textContent = 'Add Task';
+    })
+
+    btnCancelAddTask.addEventListener('click',function(event) {
+        inputForm.reset();
+        hideAddTaskForm();
+        displayTasks(currentProject);
+    })
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('projectButtons')) {
+            let button = event.target;
+            //currentProject = projects[button.innerHTML];
+            updateCurrentProject(projects[button.innerHTML]);
+
+                // "Today" and "This Week" can not be added to, they just display whatever is due this day/week
+                if (button.innerHTML === 'Today' || button.innerHTML === 'This Week') {
+                    hideAddTaskForm();
+                    displayTasks(currentProject);
+                    return;
+                }
+            displayAddTaskForm();
+            displayTasks(currentProject);
+            hideAddTaskForm();
+        }
+    })
+
+}

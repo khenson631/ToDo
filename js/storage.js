@@ -1,17 +1,9 @@
 // This file stores functions to save and load data from local storage
 
-import { item, project, projects, addProjectToSidebar } from "./main.js";
+import { projects, addProjectToSidebar } from "./main.js";
+import {item, project } from "./models.js";
 
 export function saveProjectsToStorage(projects) {
-    // example:
-    // const userObj = {
-    // username = "Maria",
-    // email: "maria@mail.com"
-    // }
-
-    // localStorage.setItem('user', JSON.stringify(userObj))
-    // }
-
     localStorage.setItem('projects',JSON.stringify(projects));
 }
 
@@ -64,7 +56,7 @@ export function deserializeProjects(loadedProjects) {
          //console.log
          //newProject.todos.push(newItem);
          projects[projectName] = newProject;
-         addProjectToSidebar(projectName);
+        //  addProjectToSidebar(projectName);
     }
 
 }
