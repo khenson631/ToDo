@@ -1,7 +1,7 @@
 // All form event listeners and click handling go in this file
 import { inputForm,currentProject,addTaskCalledFrom,btnAddNewTask,btnCancelAddTask,projects,updateAddTaskCalledFrom,updateCurrentProject } from "./main.js";
 import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
-import { displayTasks,addTaskToDOM } from "./dom.js";
+import { displayTasks,addTaskToDOM,addNewTaskFormToDom } from "./dom.js";
 import { saveProjectsToStorage} from "./storage.js";
 import { item } from "./models.js";
 
@@ -71,7 +71,6 @@ export function handleFormEvents() {
 export function handleClickEvents() {
     // do stuff
     btnAddNewTask.addEventListener('click', function(event) {
-        // addTaskCalledFrom = 'addMode';
         updateAddTaskCalledFrom('addMode');
         displayAddTaskForm();
         inputForm.querySelector('#btnAddTask').textContent = 'Add Task';
@@ -81,6 +80,8 @@ export function handleClickEvents() {
         inputForm.reset();
         hideAddTaskForm();
         displayTasks(currentProject);
+        inputForm.setAttribute('data-id', '');
+        addNewTaskFormToDom();
     })
 
     document.addEventListener('click', function(event) {

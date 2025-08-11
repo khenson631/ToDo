@@ -1,4 +1,5 @@
 import {inputForm} from "./main.js";
+import { projects } from "./main.js";
 
 export function addToTodayAndThisWeekIfApplicable(task,dueDate,id) {
 
@@ -34,17 +35,22 @@ export function removeFromTodayAndThisWeekIfApplicable(task,dueDate,id) {
     }
 }
 
-
-
 // function to create unique ID per ToDo item
 export function createID() {
     return crypto.randomUUID();
 }
 
 export function dueDateEqualsToday(dueDate) {
+    // const today = new Date();
+    // const todayYYYYMMDD = today.toISOString().split('T')[0];
+    // return dueDate === todayYYYYMMDD;
     const today = new Date();
-    const todayYYYYMMDD = today.toISOString().split('T')[0];
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const todayYYYYMMDD = `${year}-${month}-${day}`;
     return dueDate === todayYYYYMMDD;
+
 }
 
 export function getCurrentWeekRange() {
@@ -60,23 +66,18 @@ export function getCurrentWeekRange() {
     endOfWeek.setHours(23, 59, 59, 999);
 
     return {
-        start: startOfWeek.toISOString().split('T')[0],
-        end: endOfWeek.toISOString().split('T')[0]
+        start: startOfWeek,
+        end: endOfWeek
     };
 }
 
 export function isDueThisWeek(dueDateStr) {
-    const dueDate = new Date(dueDateStr);
+    // Parse as local date to avoid timezone issues
+    const [year, month, day] = dueDateStr.split('-').map(Number);
+    const dueDate = new Date(year, month - 1, day, 12, 0, 0, 0); // month is 0-based
     const { start, end } = getCurrentWeekRange();
-
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-
-    return dueDate >= startDate && dueDate <= endDate;
+    return dueDate >= start && dueDate <= end;
 }
-
-
-
 
 export function hideAddTaskForm() {
     inputForm.style.display = 'none';

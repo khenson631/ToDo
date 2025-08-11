@@ -1,4 +1,4 @@
-import { taskList } from "./main.js";
+import { taskList,inputForm } from "./main.js";
 
 export function displayTasks(project) {
     
@@ -105,4 +105,14 @@ export function addTaskToDOM(item) {
     task.appendChild(btnEditTask);
 
     return task;
+}
+
+export function addNewTaskFormToDom() {
+
+    // Get a reference to the parent container where you want to insert the form
+    const parent = document.body; // or document.querySelector('#someContainer')
+
+    // If the form element exists in memory (e.g., inputForm), append it:
+    parent.appendChild(inputForm);
+
 }

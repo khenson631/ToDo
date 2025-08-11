@@ -188,5 +188,7 @@ export function updateCurrentProject(project) {
 }
 
 // event listeners from events.js
-handleClickEvents();
-handleFormEvents();
+document.addEventListener('DOMContentLoaded', () => {
+    handleClickEvents();
+    handleFormEvents();
+});
