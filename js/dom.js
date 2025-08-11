@@ -1,4 +1,4 @@
-import { taskList,inputForm } from "./main.js";
+import { taskList,inputForm,btnAddNewTask } from "./main.js";
 
 export function displayTasks(project) {
     
@@ -115,4 +115,12 @@ export function addNewTaskFormToDom() {
     // If the form element exists in memory (e.g., inputForm), append it:
     parent.appendChild(inputForm);
 
+}
+
+export function hideAddTaskButton() {
+    btnAddNewTask.style.display = 'none';
+}
+
+export function displayAddTaskButton() {
+    btnAddNewTask.style.display = 'block';
 }

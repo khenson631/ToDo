@@ -1,7 +1,7 @@
 // All form event listeners and click handling go in this file
 import { inputForm,currentProject,addTaskCalledFrom,btnAddNewTask,btnCancelAddTask,projects,updateAddTaskCalledFrom,updateCurrentProject } from "./main.js";
 import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
-import { displayTasks,addTaskToDOM,addNewTaskFormToDom } from "./dom.js";
+import { displayTasks,addTaskToDOM,addNewTaskFormToDom,hideAddTaskButton, displayAddTaskButton } from "./dom.js";
 import { saveProjectsToStorage} from "./storage.js";
 import { item } from "./models.js";
 
@@ -65,7 +65,6 @@ export function handleFormEvents() {
 
     hideAddTaskForm();
 })
-
 }
 
 export function handleClickEvents() {
@@ -94,7 +93,11 @@ export function handleClickEvents() {
                 if (button.innerHTML === 'Today' || button.innerHTML === 'This Week') {
                     hideAddTaskForm();
                     displayTasks(currentProject);
+                    hideAddTaskButton();
                     return;
+                }
+                else {
+                    displayAddTaskButton();
                 }
             displayAddTaskForm();
             displayTasks(currentProject);
