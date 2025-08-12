@@ -34,7 +34,6 @@ export function handleFormEvents() {
         const id = inputForm.getAttribute('data-id');
         // find task by id and update
         for (let project in projects) {
-            //const task = currentProject.todos.find(b => b.id === id);
             const task = projects[project].todos.find(b => b.id === id);
             if (task) {
                 task.edit(title,description,dueDate,priority)

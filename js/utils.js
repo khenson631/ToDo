@@ -25,14 +25,15 @@ export function removeFromTodayAndThisWeekIfApplicable(task,dueDate,id) {
         if (!dueDateEqualsToday(dueDate)) {
             projects["Today"].todos.splice(projects["Today"].todos.findIndex(item => item.id === id), 1)
         }    
-    }
-    
+    }   
+
     const inThisWeekList = projects["This Week"].todos.find(a => a.id === id);
     if (inThisWeekList) {
         if (!isDueThisWeek(dueDate)) {
             projects["This Week"].todos.splice(projects["This Week"].todos.findIndex(item => item.id === id), 1)
         }
     }
+
 }
 
 // function to create unique ID per ToDo item

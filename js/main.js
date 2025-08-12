@@ -5,7 +5,7 @@ import { saveProjectsToStorage, loadProjectsFromStorage, deserializeProjects } f
 import { project } from "./models.js";
 import { displayTasks } from "./dom.js";
 import { handleClickEvents, handleFormEvents } from "./events.js";
-import { displayAddTaskForm,hideAddTaskForm } from "./utils.js";
+import { displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
 
 export const taskList = document.getElementById('taskList');
 export const sidebar = document.getElementById('sidebar');
@@ -50,6 +50,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     displayTasks(currentProject);
     hideAddTaskForm();
+
+    for (let project in projects) {
+        let todos = projects[project].todos;
+        for (let todo of todos) {
+            if (todo) {
+                removeFromTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
+            }
+        }
+}
 });
 
 // Interact with to do item: Delte, edit, chnge priority
@@ -96,7 +105,6 @@ taskList.addEventListener('click', function(event) {
         const task = currentProject.todos.find(b => b.id === id);
         if (task) {
             // Display inputForm in place of current card
-            //addTaskCalledFrom = 'editMode';
             updateAddTaskCalledFrom('editMode');
             card.replaceWith(inputForm);
             populateInputFormWithCurrentTask(task);
@@ -118,10 +126,6 @@ function populateInputFormWithCurrentTask(task) {
         else {
             inputForm.querySelector('#priority').checked = false;
         }
-
-        //const completed = false;
-        //const project = currentProject;
-        //const id = task.id;
         inputForm.querySelector('#btnAddTask').textContent = 'Update Task';
 }
 

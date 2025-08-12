@@ -8,7 +8,6 @@ export function saveProjectsToStorage(projects) {
 }
 
 export function loadProjectsFromStorage() {
-    // example: 
     const storedProjects = localStorage.getItem('projects')
 
     if (storedProjects) {
@@ -17,8 +16,6 @@ export function loadProjectsFromStorage() {
     } else {
         console.log('Project data not found in local storage')
     }
-
-    //localStorage.getItem(projectData);
 }
 
 export function serializeProjects(projects) {
@@ -27,17 +24,7 @@ export function serializeProjects(projects) {
 
 export function deserializeProjects(loadedProjects) {
     //reconstructs full project/item structure from parsed JSON
-
-    //Loop through the restored projects keys and for each:
-        //Create a new project instance    
-        //For each todo inside, create new item instances using the raw data
-        //Reassign this fully rebuilt object to your global projects 
-    //for (let key in loadedProjects) {
-        // projects[key] = new project(key);
-    
     for (let projectName in loadedProjects) {
-        // const rawProject = loadedProjects[projectName];
-        // const newProject = new project(projectName);
         const rawProject = loadedProjects[projectName];
         const newProject = new project(projectName);
 
@@ -53,10 +40,7 @@ export function deserializeProjects(loadedProjects) {
                 
                 newProject.todos.push(newItem);
          };
-         //console.log
-         //newProject.todos.push(newItem);
          projects[projectName] = newProject;
-        //  addProjectToSidebar(projectName);
     }
 
 }
