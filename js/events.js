@@ -39,9 +39,6 @@ export function handleFormEvents() {
                 task.edit(title,description,dueDate,priority)
                 addToTodayAndThisWeekIfApplicable(task,dueDate,id);
                 removeFromTodayAndThisWeekIfApplicable(task,dueDate,id);
-                //let projectToDeleteFrom = projects[project];
-                //task.delete(projectToDeleteFrom);
-                //displayTasks(currentProject); // Re-render cards after deletion}
             }
         }
         displayTasks(currentProject);

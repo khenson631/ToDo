@@ -4,7 +4,7 @@ import { saveProjectsToStorage, loadProjectsFromStorage, deserializeProjects } f
 import { project } from "./models.js";
 import { displayTasks } from "./dom.js";
 import { handleClickEvents, handleFormEvents } from "./events.js";
-import { displayAddTaskForm,hideAddTaskForm } from "./utils.js";
+import { addToTodayAndThisWeekIfApplicable, displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable  } from "./utils.js";
 
 export let projects = {};
 export const taskList = document.getElementById('taskList');
@@ -50,6 +50,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     displayTasks(currentProject);
     hideAddTaskForm();
+
+    // Remove from today and this week if applicable
+    for (let project in projects) {
+        let todos = projects[project].todos;
+        for (let todo of todos) {
+            if (todo) {
+                removeFromTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
+                addToTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
+            }
+        }
+}
 });
 
 // Interact with to do item: Delte, edit, chnge priority
