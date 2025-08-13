@@ -1,5 +1,4 @@
 import {inputForm} from "./main.js";
-import { projects } from "./main.js";
 
 export function addToTodayAndThisWeekIfApplicable(task,dueDate,id) {
 
@@ -25,16 +24,17 @@ export function removeFromTodayAndThisWeekIfApplicable(task,dueDate,id) {
         if (!dueDateEqualsToday(dueDate)) {
             projects["Today"].todos.splice(projects["Today"].todos.findIndex(item => item.id === id), 1)
         }    
-    }   
-
+    }
+    
     const inThisWeekList = projects["This Week"].todos.find(a => a.id === id);
     if (inThisWeekList) {
         if (!isDueThisWeek(dueDate)) {
             projects["This Week"].todos.splice(projects["This Week"].todos.findIndex(item => item.id === id), 1)
         }
     }
-
 }
+
+
 
 // function to create unique ID per ToDo item
 export function createID() {
@@ -42,16 +42,9 @@ export function createID() {
 }
 
 export function dueDateEqualsToday(dueDate) {
-    // const today = new Date();
-    // const todayYYYYMMDD = today.toISOString().split('T')[0];
-    // return dueDate === todayYYYYMMDD;
     const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    const todayYYYYMMDD = `${year}-${month}-${day}`;
+    const todayYYYYMMDD = today.toISOString().split('T')[0];
     return dueDate === todayYYYYMMDD;
-
 }
 
 export function getCurrentWeekRange() {
@@ -67,17 +60,19 @@ export function getCurrentWeekRange() {
     endOfWeek.setHours(23, 59, 59, 999);
 
     return {
-        start: startOfWeek,
-        end: endOfWeek
+        start: startOfWeek.toISOString().split('T')[0],
+        end: endOfWeek.toISOString().split('T')[0]
     };
 }
 
 export function isDueThisWeek(dueDateStr) {
-    // Parse as local date to avoid timezone issues
-    const [year, month, day] = dueDateStr.split('-').map(Number);
-    const dueDate = new Date(year, month - 1, day, 12, 0, 0, 0); // month is 0-based
+    const dueDate = new Date(dueDateStr);
     const { start, end } = getCurrentWeekRange();
-    return dueDate >= start && dueDate <= end;
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    return dueDate >= startDate && dueDate <= endDate;
 }
 
 export function hideAddTaskForm() {

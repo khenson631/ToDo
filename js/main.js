@@ -1,12 +1,12 @@
 "use strict";
 
-export let projects = {};
 import { saveProjectsToStorage, loadProjectsFromStorage, deserializeProjects } from "./storage.js";
 import { project } from "./models.js";
 import { displayTasks } from "./dom.js";
 import { handleClickEvents, handleFormEvents } from "./events.js";
-import { displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
+import { displayAddTaskForm,hideAddTaskForm } from "./utils.js";
 
+export let projects = {};
 export const taskList = document.getElementById('taskList');
 export const sidebar = document.getElementById('sidebar');
 export const inputForm = document.getElementById('frmNewTask');
@@ -50,15 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     displayTasks(currentProject);
     hideAddTaskForm();
-
-    for (let project in projects) {
-        let todos = projects[project].todos;
-        for (let todo of todos) {
-            if (todo) {
-                removeFromTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
-            }
-        }
-}
 });
 
 // Interact with to do item: Delte, edit, chnge priority
@@ -94,8 +85,8 @@ taskList.addEventListener('click', function(event) {
                 task.completeItem();
             }
             displayTasks(currentProject);
+            saveProjectsToStorage(projects);
         }
-        saveProjectsToStorage(projects);
     }
 
     // Edit Task Item
@@ -105,11 +96,32 @@ taskList.addEventListener('click', function(event) {
         const task = currentProject.todos.find(b => b.id === id);
         if (task) {
             // Display inputForm in place of current card
+            //addTaskCalledFrom = 'editMode';
             updateAddTaskCalledFrom('editMode');
             card.replaceWith(inputForm);
             populateInputFormWithCurrentTask(task);
             displayAddTaskForm();
             inputForm.setAttribute('data-id',id);        
+        }
+    }
+
+    // Update item priority
+    if (event.target.classList.contains('priority')) {
+        const card = event.target.closest('.task');
+        const id = card.getAttribute('data-id');
+        const task = currentProject.todos.find(b => b.id === id);
+        const priorityBtn =  event.target.closest('#priority');
+
+        if (task) {
+            
+            if (priorityBtn.textContent === "High") {
+                task.updatePriority('Normal');
+            } else {
+                //priorityBtn.checked = true;
+                task.updatePriority('High');
+            }
+            displayTasks(currentProject);
+            saveProjectsToStorage(projects);
         }
     }
 });
@@ -143,8 +155,6 @@ btnCancelProject.addEventListener('click', function(event) {
     frmAddNewProject.reset();
     btnAddProject.disabled = '';
 })
-
-
 
 frmAddNewProject.addEventListener('submit', function(event) { 
     event.preventDefault();
@@ -192,7 +202,5 @@ export function updateCurrentProject(project) {
 }
 
 // event listeners from events.js
-document.addEventListener('DOMContentLoaded', () => {
-    handleClickEvents();
-    handleFormEvents();
-});
+handleClickEvents();
+handleFormEvents();
