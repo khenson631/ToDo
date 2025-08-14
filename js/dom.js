@@ -25,6 +25,22 @@ export function addTaskToDOM(item) {
     const task = document.createElement('div');
     task.classList.add('task');
 
+    // const leftSide = document.createElement('div');
+    // leftSide.classList.add('taskLeftSide');
+    // task.appendChild(leftSide);
+
+    // const rightSide = document.createElement('div');
+    // rightSide.classList.add('taskRightSide');
+    // task.appendChild(rightSide);
+
+    const bottomHalf = document.createElement('div');
+    bottomHalf.classList.add('bottomHalf');
+    task.appendChild(bottomHalf);
+
+    const titleDescription = document.createElement('div');
+    titleDescription.classList.add('titleDescription');
+    task.appendChild(titleDescription);
+
     // checkbox to complete task
     const chkComplete = document.createElement('input');
     chkComplete.type = 'checkbox';
@@ -37,7 +53,8 @@ export function addTaskToDOM(item) {
         chkComplete.checked = false;
     }
 
-    task.appendChild(chkComplete);
+     task.appendChild(chkComplete);
+    //leftSide.append(chkComplete);
 
     // loop thru each property of the item and display it
     for (let key in item) {
@@ -78,11 +95,20 @@ export function addTaskToDOM(item) {
                     let label = document.createElement('label');
                     label.htmlFor = 'priority';
                     label.textContent = 'High Priority:';
-                    task.appendChild(label);
+                     task.appendChild(label);
+                    //leftSide.appendChild(label);
                 }
                 div.textContent = item[key];
                 div.className = [key];
-                task.appendChild(div);
+                //task.appendChild(div);
+                
+                if ([key] == "description" || [key] == 'title') {
+                    titleDescription.appendChild(div);
+                } else {
+                    // task.appendChild(div);
+                    task.appendChild(div);
+                }
+
                              
             }
         }
@@ -95,6 +121,7 @@ export function addTaskToDOM(item) {
     btnDelete.classList.add('btnDelete');
     btnDelete.innerText = 'Delete';
     task.appendChild(btnDelete);
+    // leftSide.appendChild(btnDelete);
 
     // edit button
     const btnEditTask = document.createElement('button');
@@ -103,6 +130,7 @@ export function addTaskToDOM(item) {
     btnEditTask.classList.add('btnEditTask');
     btnEditTask.innerText = 'Edit';
     task.appendChild(btnEditTask);
+    // leftSide.appendChild(btnEditTask);
 
     return task;
 }
