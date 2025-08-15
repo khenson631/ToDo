@@ -8,8 +8,10 @@ export function displayTasks(project) {
     
     // display header of current tasklist
    let taskListH1 = document.createElement('h1');
-   taskListH1.textContent = project.name;
-   taskList.appendChild(taskListH1);
+    taskListH1.textContent = 'All Tasks';
+    taskListH1.textContent = project.name;
+    taskListH1.classList.add('taskListH1');
+    taskList.appendChild(taskListH1);
 
     if (project.todos) {
         project.todos.forEach(element => {
@@ -113,19 +115,6 @@ export function addTaskToDOM(item) {
         }
     }
 
-    // delete button
-    const btnDelete = document.createElement('button');
-    btnDelete.type = 'button';
-    btnDelete.name = 'delete';
-    btnDelete.classList.add('btnDelete');
-    btnDelete.innerText = 'Delete';
-    task.appendChild(btnDelete);
-    btnDelete.style.marginLeft = '2em';
-    btnDelete.style.marginRight = '2em';
-    btnDelete.style.minWidth = '5rem';
-    btnDelete.style.height = '2em';
-    rightSide.appendChild(btnDelete);
-
     // edit button
     const btnEditTask = document.createElement('button');
     btnEditTask.type = 'button';
@@ -133,10 +122,24 @@ export function addTaskToDOM(item) {
     btnEditTask.classList.add('btnEditTask');
     btnEditTask.innerText = 'Edit';
     btnEditTask.style.minWidth = '5rem';
-    btnEditTask.style.marginRight = '2em';
     btnEditTask.style.height = '2em';
-    task.appendChild(btnEditTask);
+    btnEditTask.style.backgroundColor = 'lightgreen';
+    btnEditTask.style.marginLeft = '2em';
     rightSide.appendChild(btnEditTask);
+
+    // delete button
+    const btnDelete = document.createElement('button');
+    btnDelete.type = 'button';
+    btnDelete.name = 'delete';
+    btnDelete.classList.add('btnDelete');
+    btnDelete.innerText = 'Delete';
+    task.appendChild(btnDelete);
+    btnDelete.style.marginLeft = '1em';
+    btnDelete.style.minWidth = '5rem';
+    btnDelete.style.height = '2em';
+    btnDelete.style.backgroundColor = 'red';
+    btnDelete.style.color = 'white';
+    rightSide.appendChild(btnDelete);
 
     return task;
 }

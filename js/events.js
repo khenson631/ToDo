@@ -57,8 +57,8 @@ export function handleFormEvents() {
         
         // If task is due today or this week, display in the Today/This Week projects, respectively.
         addToTodayAndThisWeekIfApplicable(task,dueDate,id);
+        projects["All Tasks"].addToDoItem(task); // Add all projects to the "All Tasks" list by default
     }
-
     hideAddTaskForm();
 })
 }
@@ -68,12 +68,14 @@ export function handleClickEvents() {
     btnAddNewTask.addEventListener('click', function(event) {
         updateAddTaskCalledFrom('addMode');
         displayAddTaskForm();
+        hideAddTaskButton();
         inputForm.querySelector('#btnAddTask').textContent = 'Add Task';
     })
 
     btnCancelAddTask.addEventListener('click',function(event) {
         inputForm.reset();
         hideAddTaskForm();
+        displayAddTaskButton();
         displayTasks(currentProject);
         inputForm.setAttribute('data-id', '');
         addNewTaskFormToDom();
@@ -92,12 +94,19 @@ export function handleClickEvents() {
                     hideAddTaskButton();
                     return;
                 }
+                else if (button.innerHTML === 'All Tasks')  {
+                    hideAddTaskButton();
+                    hideAddTaskForm();
+                    updateCurrentProject(projects['All Tasks']);
+                    displayTasks(currentProject);
+                }
                 else {
                     displayAddTaskButton();
                 }
             displayAddTaskForm();
             displayTasks(currentProject);
             hideAddTaskForm();
+
         }
     })
 

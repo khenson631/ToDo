@@ -43,6 +43,12 @@ body {
     grid-column-start: 2;   
 }
 
+.taskListH1 {
+  background-color: lightgreen;
+  padding: 1rem;
+  border-radius: 10px;;
+}
+
 #taskList {
     display: flex;
     flex-direction: column;
@@ -58,17 +64,23 @@ body {
     padding: .5em;
     background-color:rgb(208, 234, 250);
     display: flex;
+    flex-wrap: wrap;
 }
 
 .titleDescription {
-  padding: 0 10em 0 0;
+  padding: 0 0 0 0;
   flex-direction: column;
-  width: 30%;
+  width: 65%;
 }
 
 .taskRightSide {
   order: 1;
   display: inline-flex;
+  margin: 0;
+}
+
+.dueDate {
+  width: 100px;
 }
 
 #frmNewTask {
@@ -153,10 +165,27 @@ input[type="checkbox"]:checked::after {
 #btnAddProject {
   background-color: green;
   color: white;
+  padding: .5rem;
+  display: flex;
+  justify-self: center;
+}
+
+#btnAddProject:hover {
+  background-color: rgb(0, 177, 0);
+  color: white;
+}
+
+button {
+    border-radius: 10px;
 }
 
 .projectButtons {
   padding: .5em;
+  border-radius: 10px;
+}
+
+.projectButtons:hover {
+  background-color: aliceblue;
 }
 
 #frmNewProject {

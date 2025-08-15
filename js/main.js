@@ -2,7 +2,7 @@
 
 import { saveProjectsToStorage, loadProjectsFromStorage, deserializeProjects } from "./storage.js";
 import { project } from "./models.js";
-import { displayTasks } from "./dom.js";
+import { displayTasks, hideAddTaskButton } from "./dom.js";
 import { handleClickEvents, handleFormEvents } from "./events.js";
 import { addToTodayAndThisWeekIfApplicable, displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable  } from "./utils.js";
 
@@ -22,15 +22,15 @@ export let btnSubmitNewProject = frmAddNewProject.querySelector("#btnSubmitNewPr
 
 // set the default projects
 // ToDo: Make this dynamic based on buttons in div with id = defaultProjects
-projects["Tasks"] = new project("Tasks");
+projects["All Tasks"] = new project("All Tasks");
 projects["Today"] = new project("Today");
 projects["This Week"] = new project("This Week");
-currentProject = projects["Tasks"];
+currentProject = projects["All Tasks"];
 
 // set a default task as an example
 // const exampleTask = new item("Example","This item is an example","12/31/2025","Normal",false,"Tasks");
 // console.log(exampleTask);
-// projects["Tasks"].addToDoItem(exampleTask); // add the exampleTask to the default Tasks list
+// projects["All Tasks"].addToDoItem(exampleTask); // add the exampleTask to the default Tasks list
 
 // Load from storage and initialize sidebar, display current project tasks
 document.addEventListener('DOMContentLoaded', function () {
@@ -42,14 +42,15 @@ document.addEventListener('DOMContentLoaded', function () {
          addProjectToSidebar(projectName);
     }
 
-    if (projects["Tasks"]) {
-        currentProject = projects["Tasks"];
+    if (projects["All Tasks"]) {
+        currentProject = projects["All Tasks"];
     } else {
         currentProject = Object.values(projects)[0];
     }
 
     displayTasks(currentProject);
     hideAddTaskForm();
+    hideAddTaskButton();
 
     // Remove from today and this week if applicable
     for (let project in projects) {
@@ -191,7 +192,7 @@ frmAddNewProject.addEventListener('submit', function(event) {
 })
 
 export function addProjectToSidebar(projectName) {
-    if (projectName === 'Tasks' || projectName === 'Today' || projectName === 'This Week') {
+    if (projectName === 'All Tasks' || projectName === 'Today' || projectName === 'This Week') {
         // do nothing
     } else {
         const projectsList = document.getElementById("projectsList");
