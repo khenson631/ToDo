@@ -58,11 +58,17 @@ body {
     padding: .5em;
     background-color:rgb(208, 234, 250);
     display: flex;
-    /* flex-direction: column; */
 }
 
-.taskLeftSide {
-  /* display: flex; */
+.titleDescription {
+  padding: 0 10em 0 0;
+  flex-direction: column;
+  width: 30%;
+}
+
+.taskRightSide {
+  order: 1;
+  display: inline-flex;
 }
 
 #frmNewTask {

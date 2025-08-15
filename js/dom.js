@@ -25,13 +25,13 @@ export function addTaskToDOM(item) {
     const task = document.createElement('div');
     task.classList.add('task');
 
-    // const leftSide = document.createElement('div');
-    // leftSide.classList.add('taskLeftSide');
-    // task.appendChild(leftSide);
+    const leftSide = document.createElement('div');
+    leftSide.classList.add('taskLeftSide');
+    task.appendChild(leftSide);
 
-    // const rightSide = document.createElement('div');
-    // rightSide.classList.add('taskRightSide');
-    // task.appendChild(rightSide);
+    const rightSide = document.createElement('div');
+    rightSide.classList.add('taskRightSide');
+    task.appendChild(rightSide);
 
     const bottomHalf = document.createElement('div');
     bottomHalf.classList.add('bottomHalf');
@@ -53,8 +53,8 @@ export function addTaskToDOM(item) {
         chkComplete.checked = false;
     }
 
-     task.appendChild(chkComplete);
-    //leftSide.append(chkComplete);
+     // task.appendChild(chkComplete);
+    leftSide.append(chkComplete);
 
     // loop thru each property of the item and display it
     for (let key in item) {
@@ -95,21 +95,20 @@ export function addTaskToDOM(item) {
                     let label = document.createElement('label');
                     label.htmlFor = 'priority';
                     label.textContent = 'High Priority:';
-                     task.appendChild(label);
-                    //leftSide.appendChild(label);
+                    label.style.paddingLeft = '2em';
+                    rightSide.appendChild(label);
                 }
                 div.textContent = item[key];
                 div.className = [key];
-                //task.appendChild(div);
+                if (div.id != 'priority') {
+                    div.style.paddingLeft = '2em';
+                }                
                 
                 if ([key] == "description" || [key] == 'title') {
                     titleDescription.appendChild(div);
                 } else {
-                    // task.appendChild(div);
-                    task.appendChild(div);
-                }
-
-                             
+                    rightSide.appendChild(div);
+                }                      
             }
         }
     }
@@ -121,7 +120,11 @@ export function addTaskToDOM(item) {
     btnDelete.classList.add('btnDelete');
     btnDelete.innerText = 'Delete';
     task.appendChild(btnDelete);
-    // leftSide.appendChild(btnDelete);
+    btnDelete.style.marginLeft = '2em';
+    btnDelete.style.marginRight = '2em';
+    btnDelete.style.minWidth = '5rem';
+    btnDelete.style.height = '2em';
+    rightSide.appendChild(btnDelete);
 
     // edit button
     const btnEditTask = document.createElement('button');
@@ -129,8 +132,11 @@ export function addTaskToDOM(item) {
     btnEditTask.name = 'edit';
     btnEditTask.classList.add('btnEditTask');
     btnEditTask.innerText = 'Edit';
+    btnEditTask.style.minWidth = '5rem';
+    btnEditTask.style.marginRight = '2em';
+    btnEditTask.style.height = '2em';
     task.appendChild(btnEditTask);
-    // leftSide.appendChild(btnEditTask);
+    rightSide.appendChild(btnEditTask);
 
     return task;
 }

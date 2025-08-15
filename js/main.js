@@ -80,7 +80,6 @@ taskList.addEventListener('click', function(event) {
             }
         }
         saveProjectsToStorage(projects);
-
     }
 
     // Complete task item
