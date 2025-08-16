@@ -5,6 +5,8 @@ import { displayTasks,addTaskToDOM,addNewTaskFormToDom,hideAddTaskButton, displa
 import { saveProjectsToStorage} from "./storage.js";
 import { item } from "./models.js";
 
+const btnEditProject = document.querySelector('.projectDropdown');
+
 export function handleFormEvents() {
     // do stuff
     inputForm.addEventListener('submit', function(event) {
@@ -108,6 +110,15 @@ export function handleClickEvents() {
             hideAddTaskForm();
 
         }
-    })
+        
+        if (event.target.classList.contains('projectDropdown')) {
+            //show dropdown options
+            let dropdownContent = document.querySelector('.dropdownContent');
+            dropdownContent.style.display = 'flex';
 
+            //edit project name
+
+            //delete project
+        }
+    })
 }

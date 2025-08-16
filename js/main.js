@@ -155,19 +155,19 @@ function populateInputFormWithCurrentTask(task) {
 // Logic for adding new projects
 frmAddNewProject.style.display = 'none'; // by default, hide the add project form
 
-btnAddProject.addEventListener('click', function(event) {
+btnAddProject.addEventListener('click', function() {
     frmAddNewProject.style.display = 'block';
     btnAddProject.disabled = 'true';
 })
 
 // Cancel add new project
-btnCancelProject.addEventListener('click', function(event) {
+btnCancelProject.addEventListener('click', function() {
     frmAddNewProject.style.display = 'none';
     frmAddNewProject.reset();
     btnAddProject.disabled = '';
 })
 
-frmAddNewProject.addEventListener('submit', function(event) { 
+frmAddNewProject.addEventListener('submit', function() { 
     event.preventDefault();
 
     let projectTitle = frmAddNewProject.querySelector("#newProjectTitle").value;
@@ -208,16 +208,16 @@ export function addProjectToSidebar(projectName) {
         dropdown.style.border = 'none';
 
         let dropdownContent = document.createElement('div');
+        dropdownContent.classList.add('dropdownContent');
+        dropdownContent.style.display = 'none';
 
         let dropdownEdit = document.createElement('button');
         dropdownEdit.innerHTML = "Edit";
         dropdownEdit.classList.add('projectEdit');
-        dropdownEdit.style.display = 'none';
 
         let dropdownDelete = document.createElement('button');
         dropdownDelete.innerHTML = "Delete";
         dropdownDelete.classList.add('projectDelete');
-        dropdownDelete.style.display = 'none';
 
         dropdownContent.appendChild(dropdownEdit);
         dropdownContent.appendChild(dropdownDelete);
