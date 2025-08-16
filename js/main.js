@@ -182,7 +182,6 @@ frmAddNewProject.addEventListener('submit', function(event) {
     }
     
     saveProjectsToStorage(projects);
-
     currentProject = projects[projectTitle];    
     displayTasks(currentProject);
     frmAddNewProject.style.display = 'none';
@@ -199,6 +198,32 @@ export function addProjectToSidebar(projectName) {
         let projectLink = document.createElement('button');
         projectLink.innerHTML = projectName;
         projectLink.classList.add('projectButtons');
+        
+        let dropdownContainer = document.createElement('div');
+        dropdownContainer.classList.add('projectEditContainer');
+
+        let dropdown = document.createElement('button');
+        dropdown.innerHTML = '.<br>.<br>.';
+        dropdown.classList.add('projectDropdown');
+        dropdown.style.border = 'none';
+
+        let dropdownContent = document.createElement('div');
+
+        let dropdownEdit = document.createElement('button');
+        dropdownEdit.innerHTML = "Edit";
+        dropdownEdit.classList.add('projectEdit');
+        dropdownEdit.style.display = 'none';
+
+        let dropdownDelete = document.createElement('button');
+        dropdownDelete.innerHTML = "Delete";
+        dropdownDelete.classList.add('projectDelete');
+        dropdownDelete.style.display = 'none';
+
+        dropdownContent.appendChild(dropdownEdit);
+        dropdownContent.appendChild(dropdownDelete);
+        dropdown.appendChild(dropdownContent);
+        dropdownContainer.appendChild(dropdown);
+        projectLink.appendChild(dropdownContainer);
         projectsList.appendChild(projectLink);
         displayAddTaskForm();
     }

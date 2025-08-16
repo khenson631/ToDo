@@ -147,8 +147,8 @@ input[type="checkbox"]:checked::after {
 }
 
 #btnAddTask {
-    width: 10em;
-    padding: .25em;
+  width: 10em;
+  padding: .25em;
 }
 
 #projectsList,#defaultProjects {
@@ -182,10 +182,29 @@ button {
 .projectButtons {
   padding: .5em;
   border-radius: 10px;
+  display: flex;
+  align-items: center;
+  font-weight:700;
+  justify-content: center;
+  position: relative;
 }
 
 .projectButtons:hover {
   background-color: aliceblue;
+}
+
+.projectDropdown {
+  font-weight: bolder;
+  line-height: 5px;
+}
+
+.projectEditContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 90%;
+  top: 15%;
 }
 
 #frmNewProject {
