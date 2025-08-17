@@ -1,6 +1,6 @@
 // All form event listeners and click handling go in this file
 import { inputForm,currentProject,addTaskCalledFrom,btnAddNewTask,btnCancelAddTask,projects,updateAddTaskCalledFrom,updateCurrentProject } from "./main.js";
-import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
+import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,findProject,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
 import { displayTasks,addTaskToDOM,addNewTaskFormToDom,hideAddTaskButton, displayAddTaskButton } from "./dom.js";
 import { saveProjectsToStorage} from "./storage.js";
 import { item } from "./models.js";
@@ -86,8 +86,7 @@ export function handleClickEvents() {
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('projectButtons')) {
             let button = event.target;
-            //currentProject = projects[button.innerHTML];
-            updateCurrentProject(projects[button.innerHTML]);
+            updateCurrentProject(findProject(event.target.getAttribute('data-id')));
 
                 // "Today" and "This Week" can not be added to, they just display whatever is due this day/week
                 if (button.innerHTML === 'Today' || button.innerHTML === 'This Week') {
@@ -112,13 +111,15 @@ export function handleClickEvents() {
         }
         
         if (event.target.classList.contains('projectDropdown')) {
-            //show dropdown options
+            //TODO: show dropdown options
             let dropdownContent = document.querySelector('.dropdownContent');
             dropdownContent.style.display = 'flex';
+                // make dropdown options menu appear above dots
+                // when clicking elsewhere, close the dropdown options menu
 
-            //edit project name
+            //TODO: edit project name
 
-            //delete project
+            //TODO: delete project
         }
     })
 }

@@ -7,8 +7,6 @@ export class item {
         this.dueDate = dueDate;
         this.priority = priority;
         this.completed = completed;
-        //this.project = project;
-        //this.project = toString(project);
         this.id = id;
     }
 
@@ -21,7 +19,6 @@ export class item {
     }
 
     delete(project) {
-        // currentProject.todos.splice(currentProject.todos.findIndex(item => item.id === this.id), 1)
         project.todos.splice(project.todos.findIndex(item => item.id === this.id), 1)
     }
 
@@ -36,9 +33,10 @@ export class item {
 // have different projects to store todo items
 export class project {
 
-    constructor(name,todos = []) {
+    constructor(name,todos = [],id) {
         this.name = name;
-        this.todos = todos;
+        this.todos = [];
+        this.id = id;
     }
 
     addToDoItem(item) {

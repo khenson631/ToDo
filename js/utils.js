@@ -81,3 +81,11 @@ export function hideAddTaskForm() {
 export function displayAddTaskForm() {
     inputForm.style.display = 'flex';
 }
+
+export function findProject(id) {
+     for (let project in projects) {
+            if (projects[project].id === id) {
+                return projects[project];
+            }
+     }
+}

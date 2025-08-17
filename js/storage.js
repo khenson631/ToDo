@@ -2,6 +2,7 @@
 
 import { projects, addProjectToSidebar } from "./main.js";
 import {item, project } from "./models.js";
+import { createID } from "./utils.js";
 
 export function saveProjectsToStorage(projects) {
     localStorage.setItem('projects',JSON.stringify(projects));
@@ -26,7 +27,7 @@ export function deserializeProjects(loadedProjects) {
     //reconstructs full project/item structure from parsed JSON
     for (let projectName in loadedProjects) {
         const rawProject = loadedProjects[projectName];
-        const newProject = new project(projectName);
+        const newProject = new project(projectName,[],rawProject.id);
 
         for (let rawToDoItem of rawProject.todos) {
              const newItem = new item(
@@ -42,6 +43,4 @@ export function deserializeProjects(loadedProjects) {
          };
          projects[projectName] = newProject;
     }
-
 }
-

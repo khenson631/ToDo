@@ -4,7 +4,7 @@ import { saveProjectsToStorage, loadProjectsFromStorage, deserializeProjects } f
 import { project } from "./models.js";
 import { displayTasks, hideAddTaskButton } from "./dom.js";
 import { handleClickEvents, handleFormEvents } from "./events.js";
-import { addToTodayAndThisWeekIfApplicable, displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable  } from "./utils.js";
+import { addToTodayAndThisWeekIfApplicable, createID, displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable  } from "./utils.js";
 
 export let projects = {};
 export const taskList = document.getElementById('taskList');
@@ -22,9 +22,9 @@ export let btnSubmitNewProject = frmAddNewProject.querySelector("#btnSubmitNewPr
 
 // set the default projects
 // ToDo: Make this dynamic based on buttons in div with id = defaultProjects
-projects["All Tasks"] = new project("All Tasks");
-projects["Today"] = new project("Today");
-projects["This Week"] = new project("This Week");
+projects["All Tasks"] = new project("All Tasks",null,'1');
+projects["Today"] = new project("Today",null,'2');
+projects["This Week"] = new project("This Week",null,'3');
 currentProject = projects["All Tasks"];
 
 // set a default task as an example
@@ -167,13 +167,14 @@ btnCancelProject.addEventListener('click', function() {
     btnAddProject.disabled = '';
 })
 
-frmAddNewProject.addEventListener('submit', function() { 
+frmAddNewProject.addEventListener('submit', function(event) { 
     event.preventDefault();
 
     let projectTitle = frmAddNewProject.querySelector("#newProjectTitle").value;
+    const id = createID();
 
     if (!projects[projectTitle]) {
-        projects[projectTitle] = new project(projectTitle);
+        projects[projectTitle] = new project(projectTitle,null,id);
     }
     else {
         alert("Project alredy exists!");
@@ -187,10 +188,10 @@ frmAddNewProject.addEventListener('submit', function() {
     frmAddNewProject.style.display = 'none';
     frmAddNewProject.reset();
     btnAddProject.disabled = '';
-    addProjectToSidebar(projectTitle);
+    addProjectToSidebar(projectTitle,id);
 })
 
-export function addProjectToSidebar(projectName) {
+export function addProjectToSidebar(projectName,id) {
     if (projectName === 'All Tasks' || projectName === 'Today' || projectName === 'This Week') {
         // do nothing
     } else {
@@ -224,6 +225,7 @@ export function addProjectToSidebar(projectName) {
         dropdown.appendChild(dropdownContent);
         dropdownContainer.appendChild(dropdown);
         projectLink.appendChild(dropdownContainer);
+        projectLink.setAttribute('data-id',id);
         projectsList.appendChild(projectLink);
         displayAddTaskForm();
     }

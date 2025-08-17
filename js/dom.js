@@ -5,10 +5,9 @@ export function displayTasks(project) {
     if (taskList) {
         taskList.innerHTML = ""; // prevents duplicate DOM entries    
     }
-    
+
     // display header of current tasklist
    let taskListH1 = document.createElement('h1');
-    taskListH1.textContent = 'All Tasks';
     taskListH1.textContent = project.name;
     taskListH1.classList.add('taskListH1');
     taskList.appendChild(taskListH1);
