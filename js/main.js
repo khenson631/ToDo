@@ -159,6 +159,7 @@ frmAddNewProject.style.display = 'none'; // by default, hide the add project for
 btnAddProject.addEventListener('click', function() {
     frmAddNewProject.style.display = 'block';
     btnAddProject.disabled = 'true';
+    btnAddProject.style.display = 'none';
 })
 
 // Cancel add new project
@@ -166,6 +167,7 @@ btnCancelProject.addEventListener('click', function() {
     frmAddNewProject.style.display = 'none';
     frmAddNewProject.reset();
     btnAddProject.disabled = '';
+    btnAddProject.style.display = 'block';
 })
 
 frmAddNewProject.addEventListener('submit', function(event) { 
@@ -190,6 +192,8 @@ frmAddNewProject.addEventListener('submit', function(event) {
     frmAddNewProject.reset();
     btnAddProject.disabled = '';
     addProjectToSidebar(projectTitle,id);
+    hideAddTaskForm();
+    btnAddProject.style.display = 'block';
 })
 
 export function addProjectToSidebar(projectName,id) {

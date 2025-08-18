@@ -146,9 +146,17 @@ input[type="checkbox"]:checked::after {
   display: block;
 }
 
-#btnAddTask {
-  width: 10em;
+#btnAddTask,#btnCancelAddTask {
+  width: 20%;
   padding: .25em;
+  margin: 10px;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+.frmNewTaskAddCancelContainer {
+  display: flex;
+  justify-content: center;
 }
 
 #projectsList,#defaultProjects {
@@ -227,5 +235,12 @@ button {
 #btnSubmitNewProject, #btnCancelNewProject {
   width: 5em;
   padding: 5px;
-  justify-content: space-evenly;
+  justify-content: center;
+  font-weight: bold;
+}
+
+#btnAddNewTask {
+  padding: 1rem;
+  width: 50%;
+  justify-self: center;
 }

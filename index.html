@@ -41,7 +41,7 @@
     </div>
 
     <!-- Button to bring up form to add new task -->
-    <button id="btnAddNewTask">Add New Task</button>
+    <button id="btnAddNewTask">Add Task</button>
 
     <!-- Form to add new task -->
     <form id="frmNewTask">
@@ -55,8 +55,10 @@
             <label for="priority">High Priority?</label>
             <input type="checkbox" name="priority" id="priority">
         </div>
-        <button type="submit" id="btnAddTask">Add Task</button>
-        <button type="reset" id="btnCancelAddTask">Cancel</button>
+        <div class="frmNewTaskAddCancelContainer">
+            <button type="submit" id="btnAddTask">Add Task</button>
+            <button type="reset" id="btnCancelAddTask">Cancel</button>
+        </div>
     </form>
 
     <!-- Completed tasks list -->
