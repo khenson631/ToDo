@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
     deserializeProjects(loadedProjects);
 
     for (let projectName in loadedProjects) {
-         addProjectToSidebar(projectName);
+        const projectObj = loadedProjects[projectName];
+        addProjectToSidebar(projectName, projectObj.id);
     }
 
     if (projects["All Tasks"]) {

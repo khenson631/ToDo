@@ -46,6 +46,7 @@ export function handleFormEvents() {
         displayTasks(currentProject);
         inputForm.reset();
         saveProjectsToStorage(projects);
+        displayAddTaskButton();
     }
     else if (addTaskCalledFrom === 'addMode') {
         inputForm.setAttribute('data-id','');
@@ -56,6 +57,7 @@ export function handleFormEvents() {
         displayTasks(currentProject);
         inputForm.reset();
         saveProjectsToStorage(projects);
+        displayAddTaskButton();
         
         // If task is due today or this week, display in the Today/This Week projects, respectively.
         addToTodayAndThisWeekIfApplicable(task,dueDate,id);
@@ -86,28 +88,30 @@ export function handleClickEvents() {
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('projectButtons')) {
             let button = event.target;
-            updateCurrentProject(findProject(event.target.getAttribute('data-id')));
+
+            const projectId = event.target.closest('[data-id]')?.getAttribute('data-id');
+            const project = findProject(projectId);
+            
+            if (project) {
+                updateCurrentProject(project);
+            } else {
+                console.warn('No data-id found on clicked element or its parents.');
+            }
+
 
                 // "Today" and "This Week" can not be added to, they just display whatever is due this day/week
-                if (button.innerHTML === 'Today' || button.innerHTML === 'This Week') {
+                if (button.innerHTML === 'Today' || button.innerHTML === 'This Week' || button.innerHTML === 'All Tasks') {
                     hideAddTaskForm();
                     displayTasks(currentProject);
                     hideAddTaskButton();
-                    return;
-                }
-                else if (button.innerHTML === 'All Tasks')  {
-                    hideAddTaskButton();
-                    hideAddTaskForm();
-                    updateCurrentProject(projects['All Tasks']);
-                    displayTasks(currentProject);
+                    return;            
                 }
                 else {
                     displayAddTaskButton();
-                }
-            displayAddTaskForm();
-            displayTasks(currentProject);
-            hideAddTaskForm();
-
+                    displayAddTaskForm();
+                    displayTasks(currentProject);
+                    hideAddTaskForm();
+                }            
         }
         
         if (event.target.classList.contains('projectDropdown')) {
