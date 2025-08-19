@@ -207,6 +207,11 @@ export function addProjectToSidebar(projectName,id) {
         
         let dropdownContainer = document.createElement('div');
         dropdownContainer.classList.add('projectEditContainer');
+        dropdownContainer.style.border = '1px solid black';
+        dropdownContainer.style.backgroundColor = 'white';
+
+        let buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('buttonContainer');
 
         let dropdown = document.createElement('button');
         dropdown.innerHTML = '.<br>.<br>.';
@@ -225,10 +230,12 @@ export function addProjectToSidebar(projectName,id) {
         dropdownDelete.innerHTML = "Delete";
         dropdownDelete.classList.add('projectDelete');
 
-        dropdownContent.appendChild(dropdownEdit);
-        dropdownContent.appendChild(dropdownDelete);
-        dropdown.appendChild(dropdownContent);
-        dropdownContainer.appendChild(dropdown);
+        buttonContainer.appendChild(dropdownEdit);
+        buttonContainer.appendChild(dropdownDelete);
+        //dropdownContent.appendChild(buttonContainer);
+        //dropdown.appendChild(dropdownContent);
+        //dropdownContainer.appendChild(dropdown);
+        dropdownContainer.appendChild(buttonContainer);
         projectLink.appendChild(dropdownContainer);
         projectLink.setAttribute('data-id',id);
         projectsList.appendChild(projectLink);

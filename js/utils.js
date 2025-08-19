@@ -89,3 +89,20 @@ export function findProject(id) {
             }
      }
 }
+
+// export function getProjectIndex(id) {
+//     return projects.findIndex(item => item.id === id);
+// }
+
+// export function deleteProject(index) {
+//     projects.splice(projects[index],1);
+// }
+
+export function deleteById(obj, id) {
+  for (const key in obj) {
+    if (obj[key].id === id) {
+      delete obj[key];
+      break;
+    }
+  }
+}

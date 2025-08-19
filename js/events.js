@@ -1,11 +1,11 @@
 // All form event listeners and click handling go in this file
 import { inputForm,currentProject,addTaskCalledFrom,btnAddNewTask,btnCancelAddTask,projects,updateAddTaskCalledFrom,updateCurrentProject } from "./main.js";
-import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,findProject,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable } from "./utils.js";
+import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,findProject,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable,deleteById } from "./utils.js";
 import { displayTasks,addTaskToDOM,addNewTaskFormToDom,hideAddTaskButton, displayAddTaskButton } from "./dom.js";
-import { saveProjectsToStorage} from "./storage.js";
+import { loadProjectsFromStorage, saveProjectsToStorage} from "./storage.js";
 import { item } from "./models.js";
 
-const btnEditProject = document.querySelector('.projectDropdown');
+const projectDropdown = document.querySelector('.projectDropdown');
 
 export function handleFormEvents() {
     // do stuff
@@ -115,15 +115,27 @@ export function handleClickEvents() {
         }
         
         if (event.target.classList.contains('projectDropdown')) {
-            //TODO: show dropdown options
+            const project = event.target.closest('.projectButtons');
+            const id = project.getAttribute('data-id');
+            
+            // show dropdown options
             let dropdownContent = document.querySelector('.dropdownContent');
             dropdownContent.style.display = 'flex';
+            //dropdownContent.textContent = '';
                 // make dropdown options menu appear above dots
                 // when clicking elsewhere, close the dropdown options menu
-
-            //TODO: edit project name
-
-            //TODO: delete project
+                                        
         }
+
+        //TODO: edit project name
+
+        //TODO: delete project
+        if (event.target.classList.contains('.projectDelete')) {                                           
+                deleteById(projects,id);
+                saveProjectsToStorage(projects);
+                loadProjectsFromStorage();
+                displayTasks(projects['All Tasks']);
+            }
+
     })
 }
