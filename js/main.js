@@ -196,49 +196,71 @@ frmAddNewProject.addEventListener('submit', function(event) {
     btnAddProject.style.display = 'block';
 })
 
-export function addProjectToSidebar(projectName,id) {
+export function addProjectToSidebar(projectName, id) {
     if (projectName === 'All Tasks' || projectName === 'Today' || projectName === 'This Week') {
         // do nothing
     } else {
         const projectsList = document.getElementById("projectsList");
+
+        // Create a wrapper for button + dropdown
+        let projectWrapper = document.createElement('div');
+        projectWrapper.classList.add('projectWrapper');
+        projectWrapper.style.position = 'relative'; // Ensure relative positioning
+
         let projectLink = document.createElement('button');
         projectLink.innerHTML = projectName;
         projectLink.classList.add('projectButtons');
-        
+        projectLink.setAttribute('data-id', id);
+
+        // Dropdown container
         let dropdownContainer = document.createElement('div');
         dropdownContainer.classList.add('projectEditContainer');
-        dropdownContainer.style.border = '1px solid black';
-        dropdownContainer.style.backgroundColor = 'white';
 
-        let buttonContainer = document.createElement('div');
-        buttonContainer.classList.add('buttonContainer');
-
+        // Dropdown button
         let dropdown = document.createElement('button');
         dropdown.innerHTML = '.<br>.<br>.';
         dropdown.classList.add('projectDropdown');
         dropdown.style.border = 'none';
+        dropdown.style.background = 'transparent';
+        dropdown.style.cursor = 'pointer';
 
+        // Dropdown content
         let dropdownContent = document.createElement('div');
         dropdownContent.classList.add('dropdownContent');
         dropdownContent.style.display = 'none';
+        dropdownContent.style.position = 'absolute';
+        dropdownContent.style.right = '0';
+        dropdownContent.style.top = '100%';
+        dropdownContent.style.backgroundColor = 'white';
+        dropdownContent.style.border = '1px solid #ccc';
+        dropdownContent.style.zIndex = '100';
 
+        // Edit button
         let dropdownEdit = document.createElement('button');
         dropdownEdit.innerHTML = "Edit";
         dropdownEdit.classList.add('projectEdit');
+        dropdownEdit.style.display = 'block';
+        dropdownEdit.style.width = '100%';
 
+        // Delete button
         let dropdownDelete = document.createElement('button');
         dropdownDelete.innerHTML = "Delete";
         dropdownDelete.classList.add('projectDelete');
+        dropdownDelete.style.display = 'block';
+        dropdownDelete.style.width = '100%';
 
-        buttonContainer.appendChild(dropdownEdit);
-        buttonContainer.appendChild(dropdownDelete);
-        //dropdownContent.appendChild(buttonContainer);
-        //dropdown.appendChild(dropdownContent);
-        //dropdownContainer.appendChild(dropdown);
-        dropdownContainer.appendChild(buttonContainer);
-        projectLink.appendChild(dropdownContainer);
-        projectLink.setAttribute('data-id',id);
-        projectsList.appendChild(projectLink);
+        dropdownContent.appendChild(dropdownEdit);
+        dropdownContent.appendChild(dropdownDelete);
+
+        dropdownContainer.appendChild(dropdown);
+        dropdownContainer.appendChild(dropdownContent);
+
+        // Add both button and dropdown to wrapper
+        projectWrapper.appendChild(projectLink);
+        projectWrapper.appendChild(dropdownContainer);
+
+        projectsList.appendChild(projectWrapper);
+
         displayAddTaskForm();
     }
 }

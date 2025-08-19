@@ -86,6 +86,7 @@ export function handleClickEvents() {
     })
 
     document.addEventListener('click', function(event) {
+        // Project button click
         if (event.target.classList.contains('projectButtons')) {
             let button = event.target;
 
@@ -114,28 +115,35 @@ export function handleClickEvents() {
                 }            
         }
         
+        // Dropdown dots click
         if (event.target.classList.contains('projectDropdown')) {
-            const project = event.target.closest('.projectButtons');
-            const id = project.getAttribute('data-id');
-            
-            // show dropdown options
-            let dropdownContent = document.querySelector('.dropdownContent');
-            dropdownContent.style.display = 'flex';
-            //dropdownContent.textContent = '';
-                // make dropdown options menu appear above dots
-                // when clicking elsewhere, close the dropdown options menu
-                                        
+            event.stopPropagation();
+            const dropdownContainer = event.target.closest('.projectEditContainer');
+            const dropdownContent = dropdownContainer.querySelector('.dropdownContent');
+            dropdownContent.style.display = dropdownContent.style.display === 'none' ? 'block' : 'none';
         }
 
-        //TODO: edit project name
+        // Edit project name
+        if (event.target.classList.contains('projectEdit')) {
+            const projectButton = event.target.closest('.projectButtons');
+            const id = projectButton.getAttribute('data-id');
+            // TODO: Show edit form/modal for project name using id
+        }
 
-        //TODO: delete project
-        if (event.target.classList.contains('.projectDelete')) {                                           
-                deleteById(projects,id);
-                saveProjectsToStorage(projects);
-                loadProjectsFromStorage();
-                displayTasks(projects['All Tasks']);
-            }
+        // Delete project
+        if (event.target.classList.contains('projectDelete')) {
+            const projectButton = event.target.closest('.projectButtons');
+            const id = projectButton.getAttribute('data-id');
+            deleteById(projects, id);
+            saveProjectsToStorage(projects);
+            displayTasks(projects['All Tasks']);
+            // Optionally remove the button from DOM
+            projectButton.remove();
+        }
 
+        // Hide dropdowns when clicking outside
+        if (!event.target.classList.contains('projectDropdown')) {
+            document.querySelectorAll('.dropdownContent').forEach(dc => dc.style.display = 'none');
+        }
     })
 }

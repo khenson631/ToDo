@@ -195,6 +195,7 @@ button {
   font-weight:700;
   justify-content: center;
   position: relative;
+  flex: 1;
 }
 
 .projectButtons:hover {
@@ -207,12 +208,32 @@ button {
 }
 
 .projectEditContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 90%;
-  top: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* <-- Only relative, not absolute */
+    left: unset;
+    right: unset;
+    top: unset;
+    transform: unset;
+}
+
+.projectWrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: visible;
+}
+
+.dropdownContent {
+    position: absolute;
+    right: 0;
+    top: 120%; /* Slightly below the dots button */
+    min-width: 100px;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 #frmNewProject {
