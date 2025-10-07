@@ -187,20 +187,24 @@ button {
     border-radius: 10px;
 }
 
-.projectButtons {
-  padding: .5em;
+.projectButtons, .defaultProjectButtons {
+  padding: .75em;
   border-radius: 10px;
   display: flex;
   align-items: center;
   font-weight:700;
-  justify-content: center;
+  justify-content: space-between;
   position: relative;
   flex: 1;
   border: none;
 }
 
+.defaultProjectButtons:hover {
+  background-color: aliceblue;
+}
+
 .projectButtons:hover {
-  /* background-color: aliceblue; */
+  background-color: aliceblue;
 }
 
 .projectDropdown {
@@ -214,7 +218,7 @@ button {
 }
 
 .projectWrapper:hover {
-   background-color: aliceblue;
+   /* background-color: aliceblue; */
 }
 
 .projectEditContainer {
@@ -228,10 +232,15 @@ button {
     right: 0;
     top: 120%; /* or adjust as needed */
     min-width: 100px;
-    background: white;
-    border: 1px solid #ccc;
+    /* background: transparent; */
+    /* background-color: rgb(255, 255, 255); */
+    border: none;
     z-index: 9999;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.projectDelete:hover { 
+  background-color: red;
+  color: white;
 }
 
 #frmNewProject {

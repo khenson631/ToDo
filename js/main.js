@@ -261,10 +261,8 @@ export function addProjectToSidebar(projectName, id) {
 
         // Add both button and dropdown to wrapper
         projectWrapper.appendChild(projectLink);
-        projectWrapper.appendChild(dropdownContainer);
-
+        projectLink.appendChild(dropdownContainer);
         projectsList.appendChild(projectWrapper);
-
         displayAddTaskForm();
     }
 }

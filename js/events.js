@@ -87,7 +87,7 @@ export function handleClickEvents() {
 
     document.addEventListener('click', function(event) {
         // Project button click
-        if (event.target.classList.contains('projectButtons')) {
+        if ((event.target.classList.contains('projectButtons')) || (event.target.classList.contains('defaultProjectButtons'))) {
             let button = event.target;
 
             const projectId = event.target.closest('[data-id]')?.getAttribute('data-id');
@@ -98,7 +98,6 @@ export function handleClickEvents() {
             } else {
                 console.warn('No data-id found on clicked element or its parents.');
             }
-
 
                 // "Today" and "This Week" can not be added to, they just display whatever is due this day/week
                 if (button.innerHTML === 'Today' || button.innerHTML === 'This Week' || button.innerHTML === 'All Tasks') {
@@ -134,11 +133,14 @@ export function handleClickEvents() {
         if (event.target.classList.contains('projectDelete')) {
             const projectButton = event.target.closest('.projectButtons');
             const id = projectButton.getAttribute('data-id');
-            deleteById(projects, id);
-            saveProjectsToStorage(projects);
-            displayTasks(projects['All Tasks']);
-            // Optionally remove the button from DOM
-            projectButton.remove();
+            var result = confirm("Are you sure you want to delete the project? This action cannot be undone.");
+            if (result) {
+                deleteById(projects, id);
+                saveProjectsToStorage(projects);
+                displayTasks(projects['All Tasks']);
+                // Optionally remove the button from DOM
+                projectButton.remove();
+            }
         }
 
         // Hide dropdowns when clicking outside
