@@ -196,10 +196,11 @@ button {
   justify-content: center;
   position: relative;
   flex: 1;
+  border: none;
 }
 
 .projectButtons:hover {
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
 }
 
 .projectDropdown {
@@ -207,28 +208,25 @@ button {
   line-height: 5px;
 }
 
-.projectEditContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative; /* <-- Only relative, not absolute */
-    left: unset;
-    right: unset;
-    top: unset;
-    transform: unset;
-}
-
 .projectWrapper {
     display: flex;
     align-items: center;
+}
+
+.projectWrapper:hover {
+   background-color: aliceblue;
+}
+
+.projectEditContainer {
     position: relative;
-    overflow: visible;
+    display: flex;
+    align-items: center;
 }
 
 .dropdownContent {
     position: absolute;
     right: 0;
-    top: 120%; /* Slightly below the dots button */
+    top: 120%; /* or adjust as needed */
     min-width: 100px;
     background: white;
     border: 1px solid #ccc;

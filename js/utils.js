@@ -106,3 +106,18 @@ export function deleteById(obj, id) {
     }
   }
 }
+
+export function taskExistsInProject(obj, id) {
+  for (const key in obj) {
+    if (obj[key].id === id) {
+      return true;
+    }
+  }
+}
+
+export function addToAllTasksIfApplicable(task,id) {
+    const inAllTasks = projects["All Tasks"].todos.find(a => a.id === id);
+    if (!inAllTasks) {
+        projects["All Tasks"].addToDoItem(task);
+    }    
+}

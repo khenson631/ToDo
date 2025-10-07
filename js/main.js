@@ -4,7 +4,7 @@ import { saveProjectsToStorage, loadProjectsFromStorage, deserializeProjects } f
 import { project } from "./models.js";
 import { displayTasks, hideAddTaskButton } from "./dom.js";
 import { handleClickEvents, handleFormEvents } from "./events.js";
-import { addToTodayAndThisWeekIfApplicable, createID, displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable  } from "./utils.js";
+import { addToTodayAndThisWeekIfApplicable, createID, displayAddTaskForm,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable, addToAllTasksIfApplicable } from "./utils.js";
 
 export let projects = {};
 export const taskList = document.getElementById('taskList');
@@ -43,6 +43,20 @@ document.addEventListener('DOMContentLoaded', function () {
         addProjectToSidebar(projectName, projectObj.id);
     }
 
+    // Remove from today and this week if applicable
+    for (let project in projects) {
+        let todos = projects[project].todos;
+        for (let todo of todos) {
+            if (todo) {
+                removeFromTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
+                addToTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
+                // kh 10/07/25
+                addToAllTasksIfApplicable(todo, todo.id);
+
+            }
+        }
+    }
+
     if (projects["All Tasks"]) {
         currentProject = projects["All Tasks"];
     } else {
@@ -53,16 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
     hideAddTaskForm();
     hideAddTaskButton();
 
-    // Remove from today and this week if applicable
-    for (let project in projects) {
-        let todos = projects[project].todos;
-        for (let todo of todos) {
-            if (todo) {
-                removeFromTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
-                addToTodayAndThisWeekIfApplicable(todo, todo.dueDate, todo.id);
-            }
-        }
-}
 });
 
 // Interact with to do item: Delte, edit, chnge priority
@@ -237,7 +241,7 @@ export function addProjectToSidebar(projectName, id) {
 
         // Edit button
         let dropdownEdit = document.createElement('button');
-        dropdownEdit.innerHTML = "Edit";
+        dropdownEdit.innerHTML = "Rename";
         dropdownEdit.classList.add('projectEdit');
         dropdownEdit.style.display = 'block';
         dropdownEdit.style.width = '100%';
