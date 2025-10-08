@@ -39,10 +39,6 @@ body {
     flex-direction: column;
 }
 
-#completedList {
-    grid-column-start: 2;   
-}
-
 .taskListH1 {
   background-color: lightgreen;
   padding: 1rem;

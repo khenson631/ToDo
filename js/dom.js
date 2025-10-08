@@ -12,10 +12,11 @@ export function displayTasks(project) {
     taskListH1.classList.add('taskListH1');
     taskList.appendChild(taskListH1);
 
+    // Loop thru project and display each task
     if (project.todos) {
         project.todos.forEach(element => {
-        const task = addTaskToDOM(element);
-        taskList.appendChild(task);
+            const task = addTaskToDOM(element);
+            taskList.appendChild(task);
         });
     }
 }
@@ -144,13 +145,10 @@ export function addTaskToDOM(item) {
 }
 
 export function addNewTaskFormToDom() {
-
     // Get a reference to the parent container where you want to insert the form
     const parent = document.body; // or document.querySelector('#someContainer')
-
     // If the form element exists in memory (e.g., inputForm), append it:
     parent.appendChild(inputForm);
-
 }
 
 export function hideAddTaskButton() {

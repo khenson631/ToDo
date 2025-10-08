@@ -14,8 +14,8 @@ export class item {
         this.priority = priority;
     }
 
-    completeItem(id) {
-        this.completed = true;
+    completeItem(completed) {
+        this.completed = completed;
     }
 
     delete(project) {

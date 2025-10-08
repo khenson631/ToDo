@@ -8,14 +8,9 @@ import { item } from "./models.js";
 const projectDropdown = document.querySelector('.projectDropdown');
 
 export function handleFormEvents() {
-    // do stuff
     inputForm.addEventListener('submit', function(event) {
     event.preventDefault();
-    // const buttonValue = event.target.value;
 
-    // do add stuff
-    // get inputs from form
-    // title,description,dueDate,priority,completed,project
     const title = inputForm.querySelector('#title').value;
     const description = inputForm.querySelector('#description').value;
     const dueDate = inputForm.querySelector('#dueDate').value;
@@ -31,8 +26,8 @@ export function handleFormEvents() {
     const completed = false;
     const project = currentProject;
     
+    //// Edit Mode /////
     if (addTaskCalledFrom === 'editMode') {
-        // do edit stuff
         const id = inputForm.getAttribute('data-id');
         // find task by id and update
         for (let project in projects) {
@@ -48,6 +43,7 @@ export function handleFormEvents() {
         saveProjectsToStorage(projects);
         displayAddTaskButton();
     }
+    //// Add Mode ////
     else if (addTaskCalledFrom === 'addMode') {
         inputForm.setAttribute('data-id','');
         const id = createID();

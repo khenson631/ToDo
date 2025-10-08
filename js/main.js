@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
     displayTasks(currentProject);
     hideAddTaskForm();
     hideAddTaskButton();
-
 });
 
 // Interact with to do item: Delte, edit, chnge priority
@@ -92,16 +91,19 @@ taskList.addEventListener('click', function(event) {
     if (event.target.classList.contains('chkComplete')) {
         const card = event.target.closest('.task');
         const id = card.getAttribute('data-id');
-        const task = currentProject.todos.find(b => b.id === id);
-        if (task) {
-            
-            if (task.completed === true) {
-                task.completed = false;
-            } else {
-                task.completeItem();
+        
+        for (let project in projects) {
+            const task = projects[project].todos.find(b => b.id === id);
+            if (task) {
+                if (task.completed === true) {
+                    // task.completed = false;
+                    task.completeItem(false);
+                } else {
+                    task.completeItem(true);
+                }
+                displayTasks(currentProject);
+                saveProjectsToStorage(projects);
             }
-            displayTasks(currentProject);
-            saveProjectsToStorage(projects);
         }
     }
 
@@ -109,15 +111,19 @@ taskList.addEventListener('click', function(event) {
     if (event.target.classList.contains('btnEditTask')) {
         const card = event.target.closest('.task');
         const id = card.getAttribute('data-id');
-        const task = currentProject.todos.find(b => b.id === id);
-        if (task) {
-            // Display inputForm in place of current card
-            //addTaskCalledFrom = 'editMode';
-            updateAddTaskCalledFrom('editMode');
-            card.replaceWith(inputForm);
-            populateInputFormWithCurrentTask(task);
-            displayAddTaskForm();
-            inputForm.setAttribute('data-id',id);        
+        // const task = currentProject.todos.find(b => b.id === id);
+        
+        for (let project in projects) {
+             const task = projects[project].todos.find(b => b.id === id);
+            if (task) {
+                // Display inputForm in place of current card
+                //addTaskCalledFrom = 'editMode';
+                updateAddTaskCalledFrom('editMode');
+                card.replaceWith(inputForm);
+                populateInputFormWithCurrentTask(task);
+                displayAddTaskForm();
+                inputForm.setAttribute('data-id',id);        
+            }
         }
     }
 
@@ -125,19 +131,22 @@ taskList.addEventListener('click', function(event) {
     if (event.target.classList.contains('priority')) {
         const card = event.target.closest('.task');
         const id = card.getAttribute('data-id');
-        const task = currentProject.todos.find(b => b.id === id);
+        //const task = currentProject.todos.find(b => b.id === id);
         const priorityBtn =  event.target.closest('#priority');
 
-        if (task) {
-            
-            if (priorityBtn.textContent === "High") {
-                task.updatePriority('Normal');
-            } else {
-                //priorityBtn.checked = true;
-                task.updatePriority('High');
+        for (let project in projects) {
+            const task = projects[project].todos.find(b => b.id === id);
+            if (task) {
+                
+                if (priorityBtn.textContent === "High") {
+                    task.updatePriority('Normal');
+                } else {
+                    //priorityBtn.checked = true;
+                    task.updatePriority('High');
+                }
+                displayTasks(currentProject);
+                saveProjectsToStorage(projects);
             }
-            displayTasks(currentProject);
-            saveProjectsToStorage(projects);
         }
     }
 });
