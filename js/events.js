@@ -1,6 +1,6 @@
 // All form event listeners and click handling go in this file
 import { inputForm,currentProject,addTaskCalledFrom,btnAddNewTask,btnCancelAddTask,projects,updateAddTaskCalledFrom,updateCurrentProject } from "./main.js";
-import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,findProject,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable,deleteById } from "./utils.js";
+import { addToTodayAndThisWeekIfApplicable,createID,displayAddTaskForm,findProject,hideAddTaskForm,removeFromTodayAndThisWeekIfApplicable,deleteById, deleteCurrentProjectTasksFromAllProjects } from "./utils.js";
 import { displayTasks,addTaskToDOM,addNewTaskFormToDom,hideAddTaskButton, displayAddTaskButton } from "./dom.js";
 import { loadProjectsFromStorage, saveProjectsToStorage} from "./storage.js";
 import { item } from "./models.js";
@@ -130,8 +130,9 @@ export function handleClickEvents() {
             const projectButton = event.target.closest('.projectButtons');
             const id = projectButton.getAttribute('data-id');
             var result = confirm("Are you sure you want to delete the project? This action cannot be undone.");
-            if (result) {
-                deleteById(projects, id);
+            if (result) {                                
+                deleteCurrentProjectTasksFromAllProjects(id); // kh 10/08/25                
+                deleteById(projects, id); // Deletes the  project
                 saveProjectsToStorage(projects);
                 displayTasks(projects['All Tasks']);
                 // Optionally remove the button from DOM

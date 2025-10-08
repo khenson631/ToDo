@@ -1,4 +1,5 @@
 import {inputForm,projects} from "./main.js";
+import {item} from "./models.js";
 
 export function addToTodayAndThisWeekIfApplicable(task,dueDate,id) {
 
@@ -90,14 +91,6 @@ export function findProject(id) {
      }
 }
 
-// export function getProjectIndex(id) {
-//     return projects.findIndex(item => item.id === id);
-// }
-
-// export function deleteProject(index) {
-//     projects.splice(projects[index],1);
-// }
-
 export function deleteById(obj, id) {
   for (const key in obj) {
     if (obj[key].id === id) {
@@ -107,9 +100,23 @@ export function deleteById(obj, id) {
   }
 }
 
-export function taskExistsInProject(obj, id) {
-  for (const key in obj) {
-    if (obj[key].id === id) {
+// kh 10/08/25 Function to delete task from all projects
+export function deleteCurrentProjectTasksFromAllProjects(id) {
+    let projectBeingDeleted = findProject(id);
+    for (let taskKey in projectBeingDeleted.todos){
+        let id = projectBeingDeleted.todos[taskKey].id;
+        for (let project in projects) {                                    
+            const task = projects[project].todos.find(b => b.id === id);
+            if (task) {
+                task.delete(projects[project]);
+            }
+        }
+    }
+}
+
+export function taskExistsInProject(project, id) {
+  for (let key in projects[project].todos) {
+    if (projects[project].todos[key].id === id) {
       return true;
     }
   }
